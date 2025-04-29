@@ -1,0 +1,26 @@
+Here are 5 samples of simple search requests, PPL queries, Python code, and full descriptions based on the given index mapping:
+
+1. <request>clientip:192.168.0.1 AND bytes>5000</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where clientip='192.168.0.1' AND bytes > 5000</ppl>
+<python>[doc for doc in documents if doc.get('clientip') == '192.168.0.1' and doc.get('bytes') is not None and int(doc.get('bytes')) > 5000]</python>
+<full_desc>Show me all logs from client IP 192.168.0.1 with bytes transferred greater than 5000</full_desc>
+
+2. <request>machine.os:Windows AND memory<4.5</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where machine.os = 'Windows' AND memory < 4.5</ppl>
+<python>[doc for doc in documents if str(doc.get('machine', {}).get('os')) == 'Windows' and doc.get('memory') is not None and float(doc.get('memory')) < 4.5]</python>
+<full_desc>Show me all logs from Windows machines with memory usage less than 4.5</full_desc>
+
+3. <request>geo.dest:US AND extension:php</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where geo.dest = 'US' AND extension = 'php'</ppl>
+<python>[doc for doc in documents if str(doc.get('geo', {}).get('dest')) == 'US' and str(doc.get('extension')) == 'php']</python>
+<full_desc>Show me all logs with destination country US and file extension php</full_desc>
+
+4. <request>utc_time:[2023-01-01 TO 2023-01-31] AND response:200</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where utc_time >= '2023-01-01' AND utc_time <= '2023-01-31' AND response = '200'</ppl>
+<python>[doc for doc in documents if doc.get('utc_time') is not None and '2023-01-01' <= doc.get('utc_time') <= '2023-01-31' and str(doc.get('response')) == '200']</python>
+<full_desc>Show me all logs from January 2023 with response code 200</full_desc>
+
+5. <request>NOT agent:Mozilla AND phpmemory>1000000</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where NOT agent LIKE '%Mozilla%' AND phpmemory > 1000000</ppl>
+<python>[doc for doc in documents if 'Mozilla' not in str(doc.get('agent')) and doc.get('phpmemory') is not None and int(doc.get('phpmemory')) > 1000000]</python>
+<full_desc>Show me all logs not from Mozilla agents and with PHP memory usage greater than 1,000,000</full_desc>

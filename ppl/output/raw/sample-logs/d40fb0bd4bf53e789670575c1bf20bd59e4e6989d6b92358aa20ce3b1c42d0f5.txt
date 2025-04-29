@@ -1,0 +1,26 @@
+Here are 5 samples of simple search requests, PPL queries, Python code, and full descriptions based on the given index mapping:
+
+1. <request>clientip:192.168.0.1</request>
+<ppl>source=opensearch_dashboards_sample_data_logs| where clientip = '192.168.0.1'</ppl>
+<python>[doc for doc in documents if doc.get('clientip') == '192.168.0.1']</python>
+<full_desc>Show me all logs with client IP address 192.168.0.1</full_desc>
+
+2. <request>bytes<1000 AND machine.ram>8000000000</request>
+<ppl>source=opensearch_dashboards_sample_data_logs| where bytes < 1000 AND machine.ram > 8000000000</ppl>
+<python>[doc for doc in documents if doc.get('bytes') is not None and int(doc.get('bytes')) < 1000 and doc.get('machine', {}).get('ram') is not None and int(doc.get('machine', {}).get('ram')) > 8000000000]</python>
+<full_desc>Show me all logs with bytes less than 1000 and machine RAM greater than 8GB</full_desc>
+
+3. <request>geo.dest:US AND memory>5.0</request>
+<ppl>source=opensearch_dashboards_sample_data_logs| where geo.dest = 'US' AND memory > 5.0</ppl>
+<python>[doc for doc in documents if doc.get('geo', {}).get('dest') == 'US' and doc.get('memory') is not None and float(doc.get('memory')) > 5.0]</python>
+<full_desc>Show me all logs with destination country as US and memory usage greater than 5.0</full_desc>
+
+4. <request>agent:Mozilla* AND phpmemory<=50000</request>
+<ppl>source=opensearch_dashboards_sample_data_logs| where STARTS_WITH(agent, 'Mozilla') AND phpmemory <= 50000</ppl>
+<python>[doc for doc in documents if str(doc.get('agent')).startswith('Mozilla') and doc.get('phpmemory') is not None and int(doc.get('phpmemory')) <= 50000]</python>
+<full_desc>Show me all logs with user agent starting with 'Mozilla' and PHP memory usage less than or equal to 50000</full_desc>
+
+5. <request>timestamp:[2023-01-01 TO 2023-01-31] AND referer:*google.com</request>
+<ppl>source=opensearch_dashboards_sample_data_logs| where timestamp >= '2023-01-01' AND timestamp <= '2023-01-31' AND ENDS_WITH(referer, 'google.com')</ppl>
+<python>[doc for doc in documents if doc.get('timestamp') is not None and '2023-01-01' <= doc.get('timestamp') <= '2023-01-31' and str(doc.get('referer')).endswith('google.com')]</python>
+<full_desc>Show me all logs from January 2023 with referrer ending in 'google.com'</full_desc>

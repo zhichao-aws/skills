@@ -1,0 +1,26 @@
+Here are 5 samples of simple search requests, PPL queries, Python code, and full descriptions:
+
+<request>clientip:192.168.* AND bytes>5000</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where WILDCARD(clientip, '192.168.*') AND bytes > 5000</ppl>
+<python>[doc for doc in documents if doc.get('clientip') and str(doc['clientip']).startswith('192.168.') and doc.get('bytes') is not None and int(doc['bytes']) > 5000]</python>
+<full_desc>Show me all logs with client IP addresses starting with 192.168 and bytes transferred greater than 5000</full_desc>
+
+<request>machine.ram<8000000000 AND extension:php</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where machine.ram < 8000000000 AND extension = 'php'</ppl>
+<python>[doc for doc in documents if doc.get('machine', {}).get('ram') is not None and int(doc['machine']['ram']) < 8000000000 and doc.get('extension') == 'php']</python>
+<full_desc>Show me all logs from machines with RAM less than 8GB and PHP file extensions</full_desc>
+
+<request>geo.src:US AND response:200</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where geo.src = 'US' AND response = '200'</ppl>
+<python>[doc for doc in documents if doc.get('geo', {}).get('src') == 'US' and str(doc.get('response')) == '200']</python>
+<full_desc>Show me all logs from the US with a 200 response code</full_desc>
+
+<request>timestamp>[now-1d] AND agent:Mozilla</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where timestamp > DATETIME_SUB(NOW(), INTERVAL 1 DAY) AND LIKE(agent, '%Mozilla%')</ppl>
+<python>[doc for doc in documents if doc.get('timestamp') and doc['timestamp'] > (datetime.now() - timedelta(days=1)) and doc.get('agent') and 'Mozilla' in str(doc['agent'])]</python>
+<full_desc>Show me all logs from the last 24 hours with Mozilla as the user agent</full_desc>
+
+<request>phpmemory>10000000 OR memory>100</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where phpmemory > 10000000 OR memory > 100</ppl>
+<python>[doc for doc in documents if (doc.get('phpmemory') is not None and int(doc['phpmemory']) > 10000000) or (doc.get('memory') is not None and float(doc['memory']) > 100)]</python>
+<full_desc>Show me all logs where PHP memory usage is over 10MB or general memory usage is over 100MB</full_desc>

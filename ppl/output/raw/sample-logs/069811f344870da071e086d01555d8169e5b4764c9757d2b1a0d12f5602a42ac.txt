@@ -1,0 +1,26 @@
+Here are 5 samples of simple search requests, PPL queries, Python code, and full descriptions based on the given index mapping:
+
+1. <request>clientip:192.168.0.*</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where WILDCARD(clientip, '192.168.0.*')</ppl>
+<python>[doc for doc in documents if doc.get('clientip') and str(doc['clientip']).startswith('192.168.0.')]</python>
+<full_desc>Show me all logs with client IP addresses in the 192.168.0.* subnet</full_desc>
+
+2. <request>bytes>5000 AND machine.ram<8000000000</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where bytes > 5000 and machine.ram < 8000000000</ppl>
+<python>[doc for doc in documents if doc.get('bytes') is not None and int(doc['bytes']) > 5000 and doc.get('machine', {}).get('ram') is not None and int(doc['machine']['ram']) < 8000000000]</python>
+<full_desc>Show me all logs with bytes greater than 5000 and machine RAM less than 8GB</full_desc>
+
+3. <request>geo.dest:US AND phpmemory<50000</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where geo.dest = 'US' and phpmemory < 50000</ppl>
+<python>[doc for doc in documents if doc.get('geo', {}).get('dest') == 'US' and doc.get('phpmemory') is not None and int(doc['phpmemory']) < 50000]</python>
+<full_desc>Show me all logs with destination country as US and PHP memory usage less than 50000</full_desc>
+
+4. <request>timestamp:[2023-01-01 TO 2023-01-31] AND response:200</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where timestamp >= '2023-01-01' and timestamp <= '2023-01-31' and response = '200'</ppl>
+<python>[doc for doc in documents if doc.get('timestamp') and '2023-01-01' <= doc['timestamp'] <= '2023-01-31' and str(doc.get('response')) == '200']</python>
+<full_desc>Show me all logs from January 2023 with a response code of 200</full_desc>
+
+5. <request>agent:*Mozilla* AND NOT extension:css</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where LIKE(agent, '%Mozilla%') and NOT extension = 'css'</ppl>
+<python>[doc for doc in documents if doc.get('agent') and 'Mozilla' in str(doc['agent']) and str(doc.get('extension')) != 'css']</python>
+<full_desc>Show me all logs with Mozilla in the agent string and extension not equal to css</full_desc>

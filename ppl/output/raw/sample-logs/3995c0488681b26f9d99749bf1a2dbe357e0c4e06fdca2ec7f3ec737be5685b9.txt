@@ -1,0 +1,26 @@
+Here are 5 samples of simple search requests with corresponding PPL queries, Python code, and full descriptions:
+
+1. <request>clientip=10.0.0.1</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where clientip = '10.0.0.1'</ppl>
+<python>[doc for doc in documents if str(doc.get('clientip')) == '10.0.0.1']</python>
+<full_desc>Show me all logs with client IP address equal to 10.0.0.1</full_desc>
+
+2. <request>bytes>5000 AND agent=Mozilla</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where bytes > 5000 AND agent = 'Mozilla'</ppl>
+<python>[doc for doc in documents if doc.get('bytes') is not None and int(doc.get('bytes')) > 5000 and str(doc.get('agent')) == 'Mozilla']</python>
+<full_desc>Show me all logs with bytes greater than 5000 and agent equal to Mozilla</full_desc>
+
+3. <request>machine.ram<8000000000</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where machine.ram < 8000000000</ppl>
+<python>[doc for doc in documents if doc.get('machine', {}).get('ram') is not None and int(doc.get('machine', {}).get('ram')) < 8000000000]</python>
+<full_desc>Show me all logs with machine RAM less than 8 billion (8GB)</full_desc>
+
+4. <request>geo.dest=US AND timestamp>2023-01-01</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where geo.dest = 'US' AND timestamp > '2023-01-01'</ppl>
+<python>[doc for doc in documents if str(doc.get('geo', {}).get('dest')) == 'US' and doc.get('timestamp') is not None and doc.get('timestamp') > '2023-01-01']</python>
+<full_desc>Show me all logs with destination country as US and timestamp after January 1, 2023</full_desc>
+
+5. <request>phpmemory>=10000 OR response=200</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where phpmemory >= 10000 OR response = '200'</ppl>
+<python>[doc for doc in documents if (doc.get('phpmemory') is not None and int(doc.get('phpmemory')) >= 10000) or str(doc.get('response')) == '200']</python>
+<full_desc>Show me all logs with PHP memory usage greater than or equal to 10000 or response code equal to 200</full_desc>

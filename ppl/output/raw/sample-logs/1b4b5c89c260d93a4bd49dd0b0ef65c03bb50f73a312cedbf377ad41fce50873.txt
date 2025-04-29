@@ -1,0 +1,11 @@
+Here are 5 samples of simple search requests, PPL queries, Python code, and full descriptions based on the provided index mapping:
+
+<request>bytes>10000</request><ppl>source=opensearch_dashboards_sample_data_logs | where bytes > 10000</ppl><python>[doc for doc in documents if doc.get('bytes') is not None and int(doc['bytes']) > 10000]</python><full_desc>show me all logs with bytes transferred greater than 10000</full_desc>
+
+<request>clientip=192.168.1.1</request><ppl>source=opensearch_dashboards_sample_data_logs | where clientip = '192.168.1.1'</ppl><python>[doc for doc in documents if doc.get('clientip') == '192.168.1.1']</python><full_desc>show me all logs from client IP 192.168.1.1</full_desc>
+
+<request>machine.os:Windows</request><ppl>source=opensearch_dashboards_sample_data_logs | where machine.os like '%Windows%'</ppl><python>[doc for doc in documents if 'machine' in doc and 'os' in doc['machine'] and 'Windows' in str(doc['machine']['os'])]</python><full_desc>show me all logs from Windows machines</full_desc>
+
+<request>timestamp>[2023-01-01 TO 2023-01-31]</request><ppl>source=opensearch_dashboards_sample_data_logs | where timestamp >= '2023-01-01' and timestamp <= '2023-01-31'</ppl><python>[doc for doc in documents if 'timestamp' in doc and '2023-01-01' <= doc['timestamp'] <= '2023-01-31']</python><full_desc>show me all logs from January 2023</full_desc>
+
+<request>phpmemory<1000 AND extension:php</request><ppl>source=opensearch_dashboards_sample_data_logs | where phpmemory < 1000 and extension = 'php'</ppl><python>[doc for doc in documents if doc.get('phpmemory') is not None and int(doc['phpmemory']) < 1000 and doc.get('extension') == 'php']</python><full_desc>show me all logs for PHP files with phpmemory usage less than 1000</full_desc>

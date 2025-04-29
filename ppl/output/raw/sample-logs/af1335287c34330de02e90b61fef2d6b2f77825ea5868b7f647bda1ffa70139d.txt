@@ -1,0 +1,26 @@
+Here are 5 samples of simple search requests, PPL queries, Python code, and full descriptions based on the given index mapping:
+
+1. <request>clientip:192.168.0.*</request>
+<ppl>source=opensearch_dashboards_sample_data_logs| where QUERY_STRING(['clientip'], '192.168.0.*')</ppl>
+<python>[doc for doc in documents if doc.get('clientip') and str(doc['clientip']).startswith('192.168.0.')]</python>
+<full_desc>Show me all logs with client IP addresses in the 192.168.0.* subnet</full_desc>
+
+2. <request>machine.ram>8000000000 AND machine.os:win*</request>
+<ppl>source=opensearch_dashboards_sample_data_logs| where machine.ram > 8000000000 AND QUERY_STRING(['machine.os'], 'win*')</ppl>
+<python>[doc for doc in documents if doc.get('machine', {}).get('ram') is not None and int(doc['machine']['ram']) > 8000000000 and doc.get('machine', {}).get('os') and str(doc['machine']['os']).lower().startswith('win')]</python>
+<full_desc>Show me all logs from Windows machines with more than 8GB of RAM</full_desc>
+
+3. <request>geo.dest:US AND bytes<1000</request>
+<ppl>source=opensearch_dashboards_sample_data_logs| where geo.dest='US' AND bytes < 1000</ppl>
+<python>[doc for doc in documents if doc.get('geo', {}).get('dest') == 'US' and doc.get('bytes') is not None and int(doc['bytes']) < 1000]</python>
+<full_desc>Show me all logs with destination country as US and transferred bytes less than 1000</full_desc>
+
+4. <request>utc_time:[2023-01-01 TO 2023-12-31] AND phpmemory>50000000</request>
+<ppl>source=opensearch_dashboards_sample_data_logs| where utc_time >= '2023-01-01' AND utc_time <= '2023-12-31' AND phpmemory > 50000000</ppl>
+<python>[doc for doc in documents if doc.get('utc_time') and '2023-01-01' <= str(doc['utc_time']) <= '2023-12-31' and doc.get('phpmemory') is not None and int(doc['phpmemory']) > 50000000]</python>
+<full_desc>Show me all logs from the year 2023 with PHP memory usage greater than 50MB</full_desc>
+
+5. <request>event.dataset:sample_web_logs AND -url:*.php</request>
+<ppl>source=opensearch_dashboards_sample_data_logs| where event.dataset='sample_web_logs' AND NOT QUERY_STRING(['url'], '*.php')</ppl>
+<python>[doc for doc in documents if doc.get('event', {}).get('dataset') == 'sample_web_logs' and (not doc.get('url') or not str(doc['url']).lower().endswith('.php'))]</python>
+<full_desc>Show me all sample web logs that do not have URLs ending with .php</full_desc>

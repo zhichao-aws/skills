@@ -1,0 +1,26 @@
+Here are 5 samples of simple search requests, PPL queries, Python code, and full descriptions based on the given index mapping:
+
+1. <request>bytes>10000</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where bytes > 10000</ppl>
+<python>[doc for doc in documents if doc.get('bytes') is not None and int(doc.get('bytes')) > 10000]</python>
+<full_desc>Show me all logs with bytes transferred greater than 10000</full_desc>
+
+2. <request>clientip=192.168.1.1</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where clientip = '192.168.1.1'</ppl>
+<python>[doc for doc in documents if doc.get('clientip') == '192.168.1.1']</python>
+<full_desc>Show me all logs from the client IP address 192.168.1.1</full_desc>
+
+3. <request>machine.ram<8000000000</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where machine.ram < 8000000000</ppl>
+<python>[doc for doc in documents if doc.get('machine', {}).get('ram') is not None and int(doc.get('machine', {}).get('ram')) < 8000000000]</python>
+<full_desc>Show me all logs from machines with RAM less than 8GB</full_desc>
+
+4. <request>extension=php</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where extension = 'php'</ppl>
+<python>[doc for doc in documents if doc.get('extension', {}).get('keyword') == 'php']</python>
+<full_desc>Show me all logs for requests to PHP files</full_desc>
+
+5. <request>timestamp>[now-1d]</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where timestamp > now() - 1d</ppl>
+<python>[doc for doc in documents if doc.get('timestamp') is not None and doc.get('timestamp') > (datetime.now() - timedelta(days=1))]</python>
+<full_desc>Show me all logs from the last 24 hours</full_desc>

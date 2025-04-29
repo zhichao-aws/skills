@@ -1,0 +1,26 @@
+Here are 5 samples of simple search requests, PPL queries, Python code, and full descriptions based on the given index mapping:
+
+1. <request>bytes>10000</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where bytes > 10000</ppl>
+<python>[doc for doc in documents if int(doc.get('bytes', 0)) > 10000]</python>
+<full_desc>Show me all logs where the number of bytes transferred is greater than 10000</full_desc>
+
+2. <request>clientip:192.168.0.1</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where clientip = '192.168.0.1'</ppl>
+<python>[doc for doc in documents if str(doc.get('clientip')) == '192.168.0.1']</python>
+<full_desc>Show me all logs from the client IP address 192.168.0.1</full_desc>
+
+3. <request>extension:php</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where extension.keyword = 'php'</ppl>
+<python>[doc for doc in documents if str(doc.get('extension', {}).get('keyword', '')) == 'php']</python>
+<full_desc>Show me all logs for PHP file requests</full_desc>
+
+4. <request>machine.ram<8589934592</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where machine.ram < 8589934592</ppl>
+<python>[doc for doc in documents if int(doc.get('machine', {}).get('ram', 0)) < 8589934592]</python>
+<full_desc>Show me all logs from machines with less than 8GB of RAM (8589934592 bytes)</full_desc>
+
+5. <request>timestamp:[2023-01-01 TO 2023-01-31]</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where timestamp >= '2023-01-01' and timestamp <= '2023-01-31'</ppl>
+<python>[doc for doc in documents if '2023-01-01' <= str(doc.get('timestamp', '')) <= '2023-01-31']</python>
+<full_desc>Show me all logs with timestamps between January 1, 2023 and January 31, 2023</full_desc>

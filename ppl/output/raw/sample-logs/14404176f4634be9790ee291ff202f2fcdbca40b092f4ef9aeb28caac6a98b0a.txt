@@ -1,0 +1,26 @@
+Here are 5 samples of simple search requests with corresponding PPL queries, Python code, and full descriptions:
+
+1. <request>clientip:192.168.0.1</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where clientip = '192.168.0.1'</ppl>
+<python>[doc for doc in documents if str(doc.get('clientip')) == '192.168.0.1']</python>
+<full_desc>Show me all logs with client IP address 192.168.0.1</full_desc>
+
+2. <request>bytes>5000 AND agent:Mozilla</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where bytes > 5000 AND agent LIKE '%Mozilla%'</ppl>
+<python>[doc for doc in documents if doc.get('bytes') is not None and int(doc.get('bytes')) > 5000 and 'Mozilla' in str(doc.get('agent'))]</python>
+<full_desc>Show me all logs with bytes greater than 5000 and agent containing Mozilla</full_desc>
+
+3. <request>geo.src:US AND timestamp>[2023-01-01 TO *]</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where geo.src = 'US' AND timestamp > '2023-01-01'</ppl>
+<python>[doc for doc in documents if str(doc.get('geo', {}).get('src')) == 'US' and doc.get('timestamp') is not None and doc.get('timestamp') > '2023-01-01']</python>
+<full_desc>Show me all logs from the US with timestamp after January 1, 2023</full_desc>
+
+4. <request>machine.ram<8589934592 AND response:200</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where machine.ram < 8589934592 AND response = '200'</ppl>
+<python>[doc for doc in documents if doc.get('machine', {}).get('ram') is not None and int(doc.get('machine', {}).get('ram')) < 8589934592 and str(doc.get('response')) == '200']</python>
+<full_desc>Show me all logs with machine RAM less than 8GB and response code 200</full_desc>
+
+5. <request>extension:(jpg OR png) AND NOT host:www.example.com</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where (extension = 'jpg' OR extension = 'png') AND NOT host = 'www.example.com'</ppl>
+<python>[doc for doc in documents if str(doc.get('extension')) in ['jpg', 'png'] and str(doc.get('host')) != 'www.example.com']</python>
+<full_desc>Show me all logs with file extension jpg or png, excluding those from host www.example.com</full_desc>

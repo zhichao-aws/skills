@@ -1,0 +1,26 @@
+Here are 5 samples of simple search requests, PPL queries, Python code, and full descriptions based on the given index mapping:
+
+1. <request>clientip=10.0.0.1</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where clientip = '10.0.0.1'</ppl>
+<python>[doc for doc in documents if str(doc.get('clientip')) == '10.0.0.1']</python>
+<full_desc>Show me all logs with client IP address 10.0.0.1</full_desc>
+
+2. <request>geo.dest=US, bytes>5000</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where geo.dest = 'US' and bytes > 5000</ppl>
+<python>[doc for doc in documents if doc.get('geo', {}).get('dest') == 'US' and doc.get('bytes') is not None and int(doc.get('bytes')) > 5000]</python>
+<full_desc>Show me all logs with destination country US and bytes transferred greater than 5000</full_desc>
+
+3. <request>machine.ram<8000000000</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where machine.ram < 8000000000</ppl>
+<python>[doc for doc in documents if doc.get('machine', {}).get('ram') is not None and int(doc.get('machine', {}).get('ram')) < 8000000000]</python>
+<full_desc>Show me all logs from machines with RAM less than 8 GB</full_desc>
+
+4. <request>agent="Mozilla/5.0"</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where agent = 'Mozilla/5.0'</ppl>
+<python>[doc for doc in documents if str(doc.get('agent')) == 'Mozilla/5.0']</python>
+<full_desc>Show me all logs with user agent Mozilla/5.0</full_desc>
+
+5. <request>timestamp>"2023-01-01T00:00:00Z", phpmemory<1000000</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where timestamp > '2023-01-01T00:00:00Z' and phpmemory < 1000000</ppl>
+<python>[doc for doc in documents if doc.get('timestamp') is not None and str(doc.get('timestamp')) > '2023-01-01T00:00:00Z' and doc.get('phpmemory') is not None and int(doc.get('phpmemory')) < 1000000]</python>
+<full_desc>Show me all logs after January 1, 2023, with PHP memory usage less than 1 million</full_desc>

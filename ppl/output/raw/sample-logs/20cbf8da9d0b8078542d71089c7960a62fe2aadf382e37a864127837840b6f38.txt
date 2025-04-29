@@ -1,0 +1,26 @@
+Here are 5 samples of simple search requests, PPL queries, Python code, and full descriptions based on the given index mapping:
+
+<request>clientip:192.168.*</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where STARTS_WITH(clientip, '192.168.')</ppl>
+<python>[doc for doc in documents if doc.get('clientip') and str(doc['clientip']).startswith('192.168.')]</python>
+<full_desc>Show me all logs with client IP addresses starting with 192.168.</full_desc>
+
+<request>bytes>5000 AND extension:php</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where bytes > 5000 AND extension = 'php'</ppl>
+<python>[doc for doc in documents if doc.get('bytes') is not None and int(doc['bytes']) > 5000 and doc.get('extension') == 'php']</python>
+<full_desc>Show me all logs with bytes greater than 5000 and file extension is php</full_desc>
+
+<request>machine.ram<8000000000 AND machine.os:win*</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where machine.ram < 8000000000 AND STARTS_WITH(machine.os, 'win')</ppl>
+<python>[doc for doc in documents if doc.get('machine', {}).get('ram') is not None and int(doc['machine']['ram']) < 8000000000 and doc.get('machine', {}).get('os') and str(doc['machine']['os']).lower().startswith('win')]</python>
+<full_desc>Show me all logs with machine RAM less than 8GB and operating system starting with 'win'</full_desc>
+
+<request>response:200 AND NOT agent:Mozilla</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where response = '200' AND NOT CONTAINS(agent, 'Mozilla')</ppl>
+<python>[doc for doc in documents if doc.get('response') == '200' and (not doc.get('agent') or 'Mozilla' not in str(doc['agent']))]</python>
+<full_desc>Show me all logs with response code 200 and agent not containing 'Mozilla'</full_desc>
+
+<request>geo.dest:US AND memory>=10</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where geo.dest = 'US' AND memory >= 10</ppl>
+<python>[doc for doc in documents if doc.get('geo', {}).get('dest') == 'US' and doc.get('memory') is not None and float(doc['memory']) >= 10]</python>
+<full_desc>Show me all logs with destination country as US and memory usage greater than or equal to 10</full_desc>

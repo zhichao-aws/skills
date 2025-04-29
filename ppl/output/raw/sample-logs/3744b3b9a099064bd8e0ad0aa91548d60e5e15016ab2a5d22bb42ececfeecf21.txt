@@ -1,0 +1,26 @@
+Here are 5 samples of simple search requests, PPL queries, Python code, and full descriptions based on the given index mapping:
+
+1. <request>clientip:192.168.0.1</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where clientip = '192.168.0.1'</ppl>
+<python>[doc for doc in documents if doc.get('clientip') == '192.168.0.1']</python>
+<full_desc>Show me all logs with client IP address 192.168.0.1</full_desc>
+
+2. <request>bytes>5000 AND extension:css</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where bytes > 5000 AND extension = 'css'</ppl>
+<python>[doc for doc in documents if doc.get('bytes') is not None and int(doc.get('bytes')) > 5000 and doc.get('extension') == 'css']</python>
+<full_desc>Show me all logs with bytes greater than 5000 and extension is css</full_desc>
+
+3. <request>machine.ram<=8000000000</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where machine.ram <= 8000000000</ppl>
+<python>[doc for doc in documents if doc.get('machine', {}).get('ram') is not None and int(doc.get('machine', {}).get('ram')) <= 8000000000]</python>
+<full_desc>Show me all logs where machine RAM is less than or equal to 8GB (8000000000 bytes)</full_desc>
+
+4. <request>geo.src:US AND response:200</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where geo.src = 'US' AND response = '200'</ppl>
+<python>[doc for doc in documents if doc.get('geo', {}).get('src') == 'US' and str(doc.get('response')) == '200']</python>
+<full_desc>Show me all logs from the US with a response code of 200</full_desc>
+
+5. <request>timestamp>[now-1d TO now] AND phpmemory>10000000</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where timestamp > now() - 1d AND phpmemory > 10000000</ppl>
+<python>[doc for doc in documents if doc.get('timestamp') is not None and doc.get('timestamp') > (datetime.now() - timedelta(days=1)) and doc.get('phpmemory') is not None and int(doc.get('phpmemory')) > 10000000]</python>
+<full_desc>Show me all logs from the last 24 hours with PHP memory usage greater than 10MB (10000000 bytes)</full_desc>

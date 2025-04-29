@@ -1,0 +1,191 @@
+{
+    "index_name": "opensearch_dashboards_sample_data_logs",
+    "index_mapping": {
+        "opensearch_dashboards_sample_data_logs": {
+            "mappings": {
+                "properties": {
+                    "@timestamp": {
+                        "type": "alias",
+                        "path": "timestamp"
+                    },
+                    "agent": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    },
+                    "bytes": {
+                        "type": "long"
+                    },
+                    "clientip": {
+                        "type": "ip"
+                    },
+                    "event": {
+                        "properties": {
+                            "dataset": {
+                                "type": "keyword"
+                            }
+                        }
+                    },
+                    "extension": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    },
+                    "geo": {
+                        "properties": {
+                            "coordinates": {
+                                "type": "geo_point"
+                            },
+                            "dest": {
+                                "type": "keyword"
+                            },
+                            "src": {
+                                "type": "keyword"
+                            },
+                            "srcdest": {
+                                "type": "keyword"
+                            }
+                        }
+                    },
+                    "host": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    },
+                    "index": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    },
+                    "ip": {
+                        "type": "ip"
+                    },
+                    "machine": {
+                        "properties": {
+                            "os": {
+                                "type": "text",
+                                "fields": {
+                                    "keyword": {
+                                        "type": "keyword",
+                                        "ignore_above": 256
+                                    }
+                                }
+                            },
+                            "ram": {
+                                "type": "long"
+                            }
+                        }
+                    },
+                    "memory": {
+                        "type": "double"
+                    },
+                    "message": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    },
+                    "phpmemory": {
+                        "type": "long"
+                    },
+                    "referer": {
+                        "type": "keyword"
+                    },
+                    "request": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    },
+                    "response": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    },
+                    "tags": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    },
+                    "timestamp": {
+                        "type": "date"
+                    },
+                    "url": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    },
+                    "utc_time": {
+                        "type": "date"
+                    }
+                }
+            }
+        }
+    },
+    "examples": [
+        {
+            "request": "response=404",
+            "ppl": "source=opensearch_dashboards_sample_data_logs| where response='404'",
+            "python": "[doc for doc in documents if str(doc.get('response')) == '404']",
+            "full_description": "show me all logs with response code 404"
+        },
+        {
+            "request": "extension!=debian, bytes>10",
+            "ppl": "source=opensearch_dashboards_sample_data_logs| where NOT extension = 'debian' AND bytes > 10",
+            "python": "[doc for doc in documents if str(doc.get('extension')) != 'debian' and doc.get('bytes') is not None and doc.get('bytes') > 10]",
+            "full_description": "show me all logs with extension not debian and bytes larger than 10"
+        },
+        {
+            "request": "memory<5",
+            "ppl": "source=opensearch_dashboards_sample_data_logs| where memory < 5",
+            "python": "[doc for doc in documents if doc.get('memory') is not None and doc.get('memory') < 5]",
+            "full_description": "show me all logs with memory less than 5"
+        },
+        {
+            "request": "request=/enterprise",
+            "ppl": "source=opensearch_dashboards_sample_data_logs| where request = '/enterprise'",
+            "python": "[doc for doc in documents if str(doc.get('request')) == '/enterprise']",
+            "full_description": "show me all logs with request equal to '/enterprise'"
+        },
+        {
+            "request": "response 4*",
+            "ppl": "source=opensearch_dashboards_sample_data_logs| where QUERY_STRING(['response'], '4*')",
+            "python": "[doc for doc in documents if str(doc.get('response')).startswith('4')]",
+            "full_description": "show me all logs with response starting with '4'"
+        }
+    ]
+}

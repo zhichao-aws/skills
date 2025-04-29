@@ -1,0 +1,26 @@
+Here are 5 samples of simple search requests, PPL queries, Python code, and full descriptions based on the given index mapping:
+
+1. <request>clientip=10.0.0.*</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where QUERY_STRING(['clientip'], '10.0.0.*')</ppl>
+<python>[doc for doc in documents if doc.get('clientip') and str(doc['clientip']).startswith('10.0.0.')]</python>
+<full_desc>Show me all logs with client IP addresses starting with 10.0.0.</full_desc>
+
+2. <request>bytes>5000 AND machine.ram<8000000000</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where bytes > 5000 and machine.ram < 8000000000</ppl>
+<python>[doc for doc in documents if doc.get('bytes') is not None and int(doc['bytes']) > 5000 and doc.get('machine', {}).get('ram') is not None and int(doc['machine']['ram']) < 8000000000]</python>
+<full_desc>Show me all logs with bytes greater than 5000 and machine RAM less than 8 GB</full_desc>
+
+3. <request>geo.dest:US AND memory>0.5</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where geo.dest = 'US' and memory > 0.5</ppl>
+<python>[doc for doc in documents if doc.get('geo', {}).get('dest') == 'US' and doc.get('memory') is not None and float(doc['memory']) > 0.5]</python>
+<full_desc>Show me all logs with destination country as US and memory usage greater than 0.5</full_desc>
+
+4. <request>agent:Mozilla* AND NOT extension:gz</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where QUERY_STRING(['agent'], 'Mozilla*') and NOT extension = 'gz'</ppl>
+<python>[doc for doc in documents if doc.get('agent') and str(doc['agent']).startswith('Mozilla') and doc.get('extension') != 'gz']</python>
+<full_desc>Show me all logs with user agent starting with Mozilla and file extension not equal to gz</full_desc>
+
+5. <request>timestamp:[now-1d TO now] AND phpmemory<1000000</request>
+<ppl>source=opensearch_dashboards_sample_data_logs | where timestamp >= TIMESTAMP_SCALE(NOW(), 'day', -1) and phpmemory < 1000000</ppl>
+<python>[doc for doc in documents if doc.get('timestamp') and doc['timestamp'] >= (datetime.now() - timedelta(days=1)) and doc.get('phpmemory') is not None and int(doc['phpmemory']) < 1000000]</python>
+<full_desc>Show me all logs from the last 24 hours with PHP memory usage less than 1 million</full_desc>
