@@ -1,0 +1,51 @@
+
+Here is a user question. We'll transform the user question to a SQL query. Now you need to parse the time filter for sql query.
+You need to give the extracted query and time filter range. Here are several rules:
+1. Try infer the time filter range from user input. The time range should be calculated based on current time.
+2. important: always return null when user question doesn't specify a time filter range. Otherwise we got wrong query.
+3. Extracted query should just contain user intention and without time range information.
+4. The output format is XML. Use tag <query> <time_filter> <start> and <end>. Always print these info in order.
+5. Only give me the XML tags and content, no other words.
+6. Distinguish the time-related keyword (daily, per month, monthly, per week etc) is for aggregation or for time filter. They are different.
+
+<User input>
+<user question>{q}</user question>
+<current timestamp>{cur_time}</current timestamp>
+</User input>
+
+Here are some examples:
+
+<example input>
+<user question>show me the city has max revenue in last year</user question>
+<current timestamp>2025-05-01 21:12:44</current timestamp>
+</example input>
+<example output>
+<query>show me the city has max revenue</user question>
+<time_filter>last year</time_filter>
+<start>2024-01-01 00:00:00</start>
+<end>2025-01-01 00:00:00</end>
+</example output>
+
+
+<example input>
+<user question>total order number in last week</user question>
+<current timestamp>2025-01-04 06:01:54</current timestamp>
+</example input>
+<example output>
+<query>show me the total order number</user question>
+<time_filter>last week</time_filter>
+<start>2024-12-28 00:00:00</start>
+<end>2025-01-04 00:00:00</end>
+</example output>
+
+
+<example input>
+<user question>show me the monthly total revenue</user question>
+<current timestamp>2025-11-21 02:21:27</current timestamp>
+</example input>
+<example output>
+<query>show me the monthly total revenue</user question>
+<time_filter>no explicit time range info</time_filter>
+<start>null</start>
+<end>null</end>
+</example output>
