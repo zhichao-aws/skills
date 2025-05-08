@@ -1,0 +1,45 @@
+{
+    "time_series_accuracy": 1.0,
+    "time_series_correct": 15,
+    "time_series_total": 15,
+    "non_time_series_accuracy": 0.8461538461538461,
+    "non_time_series_correct": 11,
+    "non_time_series_total": 13,
+    "overall_accuracy": 0.9285714285714286,
+    "overall_correct": 26,
+    "overall_total": 28,
+    "errors": [
+        [
+            2,
+            {
+                "question": "What is the distribution of different types of system errors across months?",
+                "query": "source = system_logs | stats count() by span(timestamp, 1M) as month, error_type",
+                "now": "2024-07-29 20:14:04",
+                "start": null,
+                "end": null
+            },
+            {
+                "query": "What is the distribution of different types of system errors",
+                "time_filter": "across months",
+                "start": "2023-07-01 20:14:04",
+                "end": "2024-07-29 20:14:04"
+            }
+        ],
+        [
+            11,
+            {
+                "question": "Can you show me the average taxful price for each day of week?",
+                "query": "source=ecommerce | stats AVG(taxful_total_price) by day_of_week_i",
+                "now": "2020-02-28 17:27:05",
+                "start": null,
+                "end": null
+            },
+            {
+                "query": "Can you show me the average taxful price for each day of week?",
+                "time_filter": "last 7 days",
+                "start": "2020-02-21 17:27:05",
+                "end": "2020-02-28 17:27:05"
+            }
+        ]
+    ]
+}

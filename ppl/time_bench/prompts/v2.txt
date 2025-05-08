@@ -1,0 +1,43 @@
+The input is a question. You need to parse the [ time scope ] and [ aggregation time unit ] for the question. Here are several rules:
+
+1. Distinguish the time related keyword is used for question scope(last week, Febrary etc), or aggregation(daily, monthly, per week, every week etc).
+2. Important: give null when not enough information or not confident to parse.
+3. When we have time scope, infer the scope range from user input and current time.
+4. When we have time scope, give the normalized question without the time-scope related expression.
+4. The output format is XML. Use tag <agg> <scope> <query> <start> and <end>. Always print these info in order.
+5. For <agg> <scope> , copy and paste the text from user question.
+6. Only give me the XML tags and content, no other words.
+
+<User input>
+<user question>{q}</user question>
+<current timestamp>{cur_time}</current timestamp>
+</User input>
+
+Here are some examples:
+
+<example input>
+<user question>show me the city has max revenue in last year</user question>
+<current timestamp>2025-05-01 21:12:44</current timestamp>
+</example input>
+
+<example output>
+<agg>null</agg>
+<scope>last year</scope>
+<query>show me the city has max revenue</user question>
+<start>2024-05-01 21:12:44</start>
+<end>2025-05-01 21:12:44</end>
+</example output>
+
+
+<example input>
+<user question>show me the monthly total revenue</user question>
+<current timestamp>2025-11-21 02:21:27</current timestamp>
+</example input>
+
+<example output>
+<agg>monthly</agg>
+<scope>null</scope>
+<query>show me the monthly total revenue</user question>
+<start>null</start>
+<end>null</end>
+</example output>

@@ -22,8 +22,8 @@ Here are some examples:
 <example output>
 <query>show me the city has max revenue</user question>
 <time_filter>last year</time_filter>
-<start>2024-01-01 00:00:00</start>
-<end>2025-01-01 00:00:00</end>
+<start>2024-05-01 21:12:44</start>
+<end>2025-05-01 21:12:44</end>
 </example output>
 
 
@@ -34,8 +34,8 @@ Here are some examples:
 <example output>
 <query>show me the total order number</user question>
 <time_filter>last week</time_filter>
-<start>2024-12-28 00:00:00</start>
-<end>2025-01-04 00:00:00</end>
+<start>2024-12-28 06:01:54</start>
+<end>2025-01-04 06:01:54</end>
 </example output>
 
 

@@ -24,3 +24,7 @@ eval_res = evaluate_time_predictions(time_bench, predicts, True)
 
 with open(f"prompts/{args.version}_res.json", "w") as f:
     json.dump(eval_res, f, indent=4)
+
+all_res = [(i, time_bench[i], predicts[i]) for i in range(len(time_bench))]
+with open(f"prompts/{args.version}_all.json", "w") as f:
+    json.dump(all_res, f, indent=4)

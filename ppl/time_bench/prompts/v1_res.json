@@ -1,0 +1,61 @@
+{
+    "time_series_accuracy": 0.9333333333333333,
+    "time_series_correct": 14,
+    "time_series_total": 15,
+    "non_time_series_accuracy": 0.8461538461538461,
+    "non_time_series_correct": 11,
+    "non_time_series_total": 13,
+    "overall_accuracy": 0.8928571428571429,
+    "overall_correct": 25,
+    "overall_total": 28,
+    "errors": [
+        [
+            2,
+            {
+                "question": "What is the distribution of different types of system errors across months?",
+                "query": "source = system_logs | stats count() by span(timestamp, 1M) as month, error_type",
+                "now": "2024-07-29 20:14:04",
+                "start": null,
+                "end": null
+            },
+            {
+                "query": "What is the distribution of different types of system errors",
+                "time_filter": "across months",
+                "start": "2023-07-01 00:00:00",
+                "end": "2024-07-29 20:14:04"
+            }
+        ],
+        [
+            7,
+            {
+                "question": "What is the average latency at 1 minute granularity by service?",
+                "query": "source=index | stats avg(duration) as avg_duration by span(timestamp, 1m), `process.serviceName`",
+                "now": "2009-11-21 14:32:06",
+                "start": null,
+                "end": null
+            },
+            {
+                "query": "What is the average latency at 1 minute granularity by service?",
+                "time_filter": "1 minute granularity",
+                "start": "2009-11-21 14:31:06",
+                "end": "2009-11-21 14:32:06"
+            }
+        ],
+        [
+            18,
+            {
+                "question": "I want to know weekly trend of average bytes and request number for each machine operation system in the last month.",
+                "query": "source=log_index | where timestamp > DATE_SUB(NOW(), INTERVAL 1 MONTH) | stats AVG(bytes), COUNT() by span(timestamp, 1w), machineos",
+                "now": "2005-04-22 09:58:20",
+                "start": "2023-03-22 09:58:20",
+                "end": "2023-04-22 09:58:20"
+            },
+            {
+                "query": "I want to know average bytes and request number for each machine operation system",
+                "time_filter": "weekly trend in the last month",
+                "start": "2005-03-22 09:58:20",
+                "end": "2005-04-22 09:58:20"
+            }
+        ]
+    ]
+}
