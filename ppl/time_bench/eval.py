@@ -2,6 +2,7 @@ import json
 import argparse
 
 from utils import invoke, evaluate_time_predictions
+from threadpool import ThreadPool
 from tqdm import tqdm
 
 parser = argparse.ArgumentParser()
@@ -16,9 +17,20 @@ with open(f"prompts/{args.version}.txt") as f:
 with open("time_bench.json") as f:
     time_bench = json.load(f)
 
-predicts = []
-for example in tqdm(time_bench):
-    predicts.append(invoke(example["question"], example["now"], prompt))
+# Function to process a single example
+def process_example(example, prompt):
+    return invoke(example["question"], example["now"], prompt)
+
+# Create a thread pool
+thread_pool = ThreadPool(max_workers=2)
+
+# Use the thread pool to process all examples in parallel
+predicts = thread_pool.map_with_args(
+    func=process_example,
+    items=time_bench,
+    fixed_args={"prompt": prompt},
+    desc="Processing examples"
+)
 
 eval_res = evaluate_time_predictions(time_bench, predicts, True)
 

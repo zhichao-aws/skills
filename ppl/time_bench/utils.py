@@ -2,6 +2,9 @@ import os
 import re
 import boto3
 import json
+import time
+import logging
+from typing import Dict, Any, Optional
 
 
 def setup_bedrock():
@@ -33,33 +36,64 @@ def parse_tagged_string(text):
     return result
 
 
-def invoke(q, cur_time, prompt):
+def invoke(q: str, cur_time: str, prompt: str, max_retries: int = 3, initial_delay: float = 1.0) -> Dict[str, Any]:
+    """
+    Invoke the Bedrock model with retry functionality.
+    
+    Args:
+        q: Question to ask
+        cur_time: Current time
+        prompt: Prompt template
+        max_retries: Maximum number of retry attempts (default: 3)
+        initial_delay: Initial delay between retries in seconds (default: 1.0)
+        
+    Returns:
+        Dict containing the parsed response
+        
+    Raises:
+        Exception: If all retry attempts fail
+    """
     bedrock_client = setup_bedrock()
-    response = bedrock_client.invoke_model(
-        modelId="anthropic.claude-3-haiku-20240307-v1:0",
-        body=json.dumps(
-            {
-                "temperature": 0,
-                "anthropic_version": "bedrock-2023-05-31",
-                "max_tokens": 8192,
-                "messages": [
+    last_exception = None
+    
+    for attempt in range(max_retries + 1):
+        try:
+            response = bedrock_client.invoke_model(
+                modelId="anthropic.claude-3-haiku-20240307-v1:0",
+                body=json.dumps(
                     {
-                        "role": "user",
-                        "content": [
+                        "temperature": 0,
+                        "anthropic_version": "bedrock-2023-05-31",
+                        "max_tokens": 8192,
+                        "messages": [
                             {
-                                "type": "text",
-                                "text": prompt.format(q=q, cur_time=cur_time),
+                                "role": "user",
+                                "content": [
+                                    {
+                                        "type": "text",
+                                        "text": prompt.format(q=q, cur_time=cur_time),
+                                    }
+                                ],
                             }
                         ],
                     }
-                ],
-            }
-        ),
-    )
-
-    result = json.loads(response.get("body").read())
-    generated_text = result["content"][0]["text"]
-    return parse_tagged_string(generated_text)
+                ),
+            )
+            
+            result = json.loads(response.get("body").read())
+            generated_text = result["content"][0]["text"]
+            return parse_tagged_string(generated_text)
+            
+        except Exception as e:
+            last_exception = e
+            if attempt < max_retries:
+                # Calculate exponential backoff delay
+                delay = initial_delay * (2 ** attempt)
+                logging.warning(f"Attempt {attempt + 1} failed. Retrying in {delay:.1f} seconds...")
+                time.sleep(delay)
+            else:
+                logging.error(f"All {max_retries} retry attempts failed")
+                raise last_exception
 
 
 def evaluate_time_predictions(time_bench, predictions, print_errors=False):

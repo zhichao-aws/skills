@@ -292,7 +292,7 @@
         {
             "question": "I want to know weekly trend of average bytes and request number for each machine operation system in the last month.",
             "query": "source=log_index | where timestamp > DATE_SUB(NOW(), INTERVAL 1 MONTH) | stats AVG(bytes), COUNT() by span(timestamp, 1w), machineos",
-            "now": "2005-04-22 09:58:20",
+            "now": "2023-04-22 09:58:20",
             "start": "2023-03-22 09:58:20",
             "end": "2023-04-22 09:58:20"
         },

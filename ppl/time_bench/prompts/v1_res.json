@@ -1,12 +1,12 @@
 {
-    "time_series_accuracy": 0.9333333333333333,
-    "time_series_correct": 14,
+    "time_series_accuracy": 1.0,
+    "time_series_correct": 15,
     "time_series_total": 15,
     "non_time_series_accuracy": 0.8461538461538461,
     "non_time_series_correct": 11,
     "non_time_series_total": 13,
-    "overall_accuracy": 0.8928571428571429,
-    "overall_correct": 25,
+    "overall_accuracy": 0.9285714285714286,
+    "overall_correct": 26,
     "overall_total": 28,
     "errors": [
         [
@@ -39,22 +39,6 @@
                 "time_filter": "1 minute granularity",
                 "start": "2009-11-21 14:31:06",
                 "end": "2009-11-21 14:32:06"
-            }
-        ],
-        [
-            18,
-            {
-                "question": "I want to know weekly trend of average bytes and request number for each machine operation system in the last month.",
-                "query": "source=log_index | where timestamp > DATE_SUB(NOW(), INTERVAL 1 MONTH) | stats AVG(bytes), COUNT() by span(timestamp, 1w), machineos",
-                "now": "2005-04-22 09:58:20",
-                "start": "2023-03-22 09:58:20",
-                "end": "2023-04-22 09:58:20"
-            },
-            {
-                "query": "I want to know average bytes and request number for each machine operation system",
-                "time_filter": "weekly trend in the last month",
-                "start": "2005-03-22 09:58:20",
-                "end": "2005-04-22 09:58:20"
             }
         ]
     ]
