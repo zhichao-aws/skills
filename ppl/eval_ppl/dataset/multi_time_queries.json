@@ -1,0 +1,18 @@
+[
+    {
+        "question": "Show me all orders from last week with products created after 2016-12-20",
+        "target_index": "ecommerce",
+        "query": "source=ecommerce\n| where order_date > DATE_SUB(NOW(), INTERVAL 1 WEEK)\n| where products.created_on >= '2016-12-20'\n| fields customer_full_name, order_date, products.product_name, products.created_on",
+        "type": "3",
+        "now": "TIMESTAMP('2025-05-27 03:53:30')",
+        "date_field": "order_date"
+    },
+    {
+        "question": "Show me all orders with products created after 2016-12-20",
+        "target_index": "ecommerce",
+        "query": "source=ecommerce\n| where products.created_on >= '2016-12-20'\n| fields customer_full_name, order_date, products.product_name, products.created_on",
+        "type": "3",
+        "now": "TIMESTAMP('2025-07-27 03:53:30')",
+        "date_field": "order_date"
+    }
+]
