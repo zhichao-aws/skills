@@ -21,6 +21,7 @@ with open("time_bench.json") as f:
 def process_example(example, prompt):
     return invoke(example["question"], example["now"], prompt)
 
+
 # Create a thread pool
 thread_pool = ThreadPool(max_workers=2)
 
@@ -29,7 +30,7 @@ predicts = thread_pool.map_with_args(
     func=process_example,
     items=time_bench,
     fixed_args={"prompt": prompt},
-    desc="Processing examples"
+    desc="Processing examples",
 )
 
 eval_res = evaluate_time_predictions(time_bench, predicts, True)

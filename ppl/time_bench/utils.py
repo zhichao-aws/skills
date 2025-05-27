@@ -38,26 +38,28 @@ def parse_tagged_string(text):
     return result
 
 
-def invoke(q: str, cur_time: str, prompt: str, max_retries: int = 3, initial_delay: float = 1.0) -> Dict[str, Any]:
+def invoke(
+    q: str, cur_time: str, prompt: str, max_retries: int = 3, initial_delay: float = 1.0
+) -> Dict[str, Any]:
     """
     Invoke the Bedrock model with retry functionality.
-    
+
     Args:
         q: Question to ask
         cur_time: Current time
         prompt: Prompt template
         max_retries: Maximum number of retry attempts (default: 3)
         initial_delay: Initial delay between retries in seconds (default: 1.0)
-        
+
     Returns:
         Dict containing the parsed response
-        
+
     Raises:
         Exception: If all retry attempts fail
     """
     bedrock_client = setup_bedrock()
     last_exception = None
-    
+
     for attempt in range(max_retries + 1):
         try:
             response = bedrock_client.invoke_model(
@@ -81,17 +83,19 @@ def invoke(q: str, cur_time: str, prompt: str, max_retries: int = 3, initial_del
                     }
                 ),
             )
-            
+
             result = json.loads(response.get("body").read())
             generated_text = result["content"][0]["text"]
             return parse_tagged_string(generated_text)
-            
+
         except Exception as e:
             last_exception = e
             if attempt < max_retries:
                 # Calculate exponential backoff delay
-                delay = initial_delay * (2 ** attempt)
-                logging.warning(f"Attempt {attempt + 1} failed. Retrying in {delay:.1f} seconds...")
+                delay = initial_delay * (2**attempt)
+                logging.warning(
+                    f"Attempt {attempt + 1} failed. Retrying in {delay:.1f} seconds..."
+                )
                 time.sleep(delay)
             else:
                 logging.error(f"All {max_retries} retry attempts failed")
