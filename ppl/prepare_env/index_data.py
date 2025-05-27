@@ -5,7 +5,9 @@ from datetime import datetime, timedelta
 from opensearchpy import OpenSearch, helpers
 
 # Set up logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 # OpenSearch connection details
 OPENSEARCH_HOST = os.environ.get("OPENSEARCH_HOST", "localhost:9200")
@@ -20,7 +22,7 @@ anchor_time_fields = {
     "flight": ["timestamp"],
     "log_index": ["timestamp"],
     "otel_logs": ["startTime"],
-    "sso_log": ["@timestamp"]
+    "sso_log": ["@timestamp"],
 }
 
 # Initialize the OpenSearch client
@@ -34,57 +36,64 @@ client = OpenSearch(
     ssl_show_warn=False,
 )
 
+
 def read_dataset_file(file_path):
-    with open(file_path, 'r') as f:
+    with open(file_path, "r") as f:
         return [json.loads(line) for line in f]
 
+
 def read_mapping_file(file_path):
-    with open(file_path, 'r') as f:
+    with open(file_path, "r") as f:
         return json.load(f)
+
 
 def create_or_recreate_index(index_name, mapping):
     if client.indices.exists(index=index_name):
         client.indices.delete(index=index_name)
     client.indices.create(index_name, body=mapping)
 
-def get_date_fields(mapping, parent_key=''):
+
+def get_date_fields(mapping, parent_key=""):
     date_fields = []
-    
+
     # Check for properties in the mapping
-    if 'properties' in mapping:
-        for field, properties in mapping['properties'].items():
+    if "properties" in mapping:
+        for field, properties in mapping["properties"].items():
             full_key = f"{parent_key}.{field}" if parent_key else field
-            
+
             # Check if this field is a date type
-            if properties.get('type') in ['date', 'date_nanos']:
+            if properties.get("type") in ["date", "date_nanos"]:
                 date_fields.append(full_key)
-            
+
             # Recursively check nested properties
-            if 'properties' in properties:
+            if "properties" in properties:
                 date_fields.extend(get_date_fields(properties, full_key))
-            
+
             # Check for fields within the field definition
-            if 'fields' in properties:
-                for sub_field, sub_properties in properties['fields'].items():
-                    if sub_properties.get('type') in ['date', 'date_nanos']:
+            if "fields" in properties:
+                for sub_field, sub_properties in properties["fields"].items():
+                    if sub_properties.get("type") in ["date", "date_nanos"]:
                         date_fields.append(f"{full_key}.{sub_field}")
-                    
+
                     # Recursively check properties within fields
-                    if 'properties' in sub_properties:
-                        date_fields.extend(get_date_fields(sub_properties, f"{full_key}.{sub_field}"))
-    
+                    if "properties" in sub_properties:
+                        date_fields.extend(
+                            get_date_fields(sub_properties, f"{full_key}.{sub_field}")
+                        )
+
     return date_fields
+
 
 def adjust_time_fields(documents, date_fields, anchor_field, time_delta):
     """
     Adjust time fields in documents based on an anchor field.
-    
+
     Args:
         documents: List of document dictionaries
         date_fields: List of field paths (using dot notation for nested fields)
         anchor_field: The field to use as time anchor
         time_delta: Number of days to shift time backwards from current time
-        
+
     Returns:
         The modified documents list
     """
@@ -94,7 +103,7 @@ def adjust_time_fields(documents, date_fields, anchor_field, time_delta):
     try:
         # Helper function to get a field value using dot notation path
         def get_field_value(doc, field_path):
-            parts = field_path.split('.')
+            parts = field_path.split(".")
             current = doc
             for part in parts:
                 if isinstance(current, dict) and part in current:
@@ -102,21 +111,21 @@ def adjust_time_fields(documents, date_fields, anchor_field, time_delta):
                 else:
                     return None
             return current
-            
+
         # Helper function to set a field value using dot notation path
         def set_field_value(doc, field_path, value):
-            parts = field_path.split('.')
+            parts = field_path.split(".")
             current = doc
             for i, part in enumerate(parts[:-1]):
                 if isinstance(current, dict) and part in current:
                     current = current[part]
                 else:
                     return False
-            
+
             if isinstance(current, dict) and parts[-1] in current:
                 current[parts[-1]] = value
                 return True
-            
+
             return False
 
         # Find documents that have the anchor field
@@ -125,24 +134,26 @@ def adjust_time_fields(documents, date_fields, anchor_field, time_delta):
             anchor_value = get_field_value(doc, anchor_field)
             if anchor_value and isinstance(anchor_value, str):
                 try:
-                    valid_anchors.append(datetime.fromisoformat(anchor_value.rstrip('Z')))
+                    valid_anchors.append(
+                        datetime.fromisoformat(anchor_value.rstrip("Z"))
+                    )
                 except (ValueError, AttributeError):
                     continue
-        
+
         if not valid_anchors:
             logging.warning(f"No valid anchor times found for field: {anchor_field}")
             return documents
-            
+
         min_anchor_time = min(valid_anchors)
         max_anchor_time = max(valid_anchors)
-        
+
         logging.info(f"Time range: {min_anchor_time} to {max_anchor_time}")
 
         # Calculate the time adjustment
         now = datetime.utcnow()
         target_time = now - timedelta(days=time_delta)
         time_difference = target_time - min_anchor_time
-        
+
         print(f"Time difference for adjustment: {time_difference}")
 
         # Adjust all date fields
@@ -155,30 +166,28 @@ def adjust_time_fields(documents, date_fields, anchor_field, time_delta):
                     try:
                         original_time = datetime.fromisoformat(field_value[:23])
                         adjusted_time = original_time + time_difference
-                        if set_field_value(doc, field, adjusted_time.isoformat() + 'Z'):
+                        if set_field_value(doc, field, adjusted_time.isoformat() + "Z"):
                             adjusted_count += 1
                     except (ValueError, TypeError) as e:
                         logging.warning(f"Error adjusting time for field {field}: {e}")
 
-        logging.info(f"Adjusted {adjusted_count} fields across {len(documents)} documents. Min anchor time: {min_anchor_time}, Target time: {target_time}")
+        logging.info(
+            f"Adjusted {adjusted_count} fields across {len(documents)} documents. Min anchor time: {min_anchor_time}, Target time: {target_time}"
+        )
     except Exception as e:
         logging.error(f"Error in time adjustment: {e}")
         import traceback
+
         traceback.print_exc()
 
     return documents
 
 
 def bulk_index_documents(index_name, documents):
-    actions = [
-        {
-            "_index": index_name,
-            "_source": doc
-        }
-        for doc in documents
-    ]
+    actions = [{"_index": index_name, "_source": doc} for doc in documents]
     helpers.bulk(client, actions)
     client.indices.refresh(index_name)
+
 
 def process_and_index_files(dry_run=False):
     dataset_dir = "dataset"
@@ -206,9 +215,13 @@ def process_and_index_files(dry_run=False):
 
                 if anchor_field and anchor_field in date_fields:
                     # Adjust time fields
-                    documents = adjust_time_fields(documents, date_fields, anchor_field, TIME_DELTA_DAYS)
+                    documents = adjust_time_fields(
+                        documents, date_fields, anchor_field, TIME_DELTA_DAYS
+                    )
                 else:
-                    logging.warning(f"No valid anchor field found for {index_name}. Skipping time adjustment.")
+                    logging.warning(
+                        f"No valid anchor field found for {index_name}. Skipping time adjustment."
+                    )
 
                 if not dry_run:
                     # Create or recreate the index with the correct mapping
@@ -219,16 +232,23 @@ def process_and_index_files(dry_run=False):
 
                     logging.info(f"Indexed {len(documents)} documents in {index_name}")
                 else:
-                    logging.info(f"Dry run: Would index {len(documents)} documents in {index_name}")
+                    logging.info(
+                        f"Dry run: Would index {len(documents)} documents in {index_name}"
+                    )
 
             except Exception as e:
                 logging.error(f"Error processing {index_name}: {e}")
 
+
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description="Process and index files with time adjustment")
-    parser.add_argument("--dry-run", action="store_true", help="Perform a dry run without indexing")
+    parser = argparse.ArgumentParser(
+        description="Process and index files with time adjustment"
+    )
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Perform a dry run without indexing"
+    )
     args = parser.parse_args()
 
     if client.ping():
