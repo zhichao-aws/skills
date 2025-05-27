@@ -27,13 +27,34 @@ client = OpenSearch(
 )
 
 
+def insert_after_first_pipe(query, insert_text):
+    parts = query.split("|", 1)
+    if len(parts) < 2:
+        return query
+
+    new_query = parts[0] + "|" + insert_text + "|" + parts[1]
+    return new_query
+
+
 def run_ppl(sample):
     query = sample["query"]
+    if "date_field" in sample:
+        query = insert_after_first_pipe(
+            sample["query"], f"where {sample['date_field']} < NOW() "
+        )
     if "now" in sample:
         query = query.replace("NOW()", sample["now"])
-    return client.transport.perform_request(
-        "POST", "/_plugins/_ppl", body={"query": query}
-    )["datarows"]
+    sample["query"] = query
+
+    try:
+        generated_result = client.transport.perform_request(
+            "POST", "/_plugins/_ppl", body={"query": query}
+        )["datarows"]
+        sample["data_rows"] = generated_result
+    except Exception as e:
+        logging.error(f"error when execute query: {sample['query']} {e}")
+        sample["data_rows"] = "ERROR"
+    return sample
 
 
 from concurrent.futures import ThreadPoolExecutor
@@ -45,20 +66,10 @@ def evaluate_ppl(ppl_eval_file):
 
     results = []
 
-    def run(sample):
-        try:
-            generated_result = run_ppl(sample)
-            sample["data_rows"] = generated_result
-        except Exception as e:
-            logging.error(f"error when execute query: {sample['query']} {e}")
-            sample["data_rows"] = "ERROR"
-
-        return sample
-
     with ThreadPoolExecutor(max_workers=5) as executor:
         results = list(
             tqdm(
-                executor.map(run, samples),
+                executor.map(run_ppl, samples),
                 total=len(samples),
                 desc="Running PPL",
             )
