@@ -49,8 +49,9 @@ def run_ppl(sample):
     try:
         generated_result = client.transport.perform_request(
             "POST", "/_plugins/_ppl", body={"query": query}
-        )["datarows"]
-        sample["data_rows"] = generated_result
+        )
+        sample["data_rows"] = generated_result["datarows"]
+        sample["schema"] = generated_result["schema"]
     except Exception as e:
         logging.error(f"error when execute query: {sample['query']} {e}")
         sample["data_rows"] = "ERROR"

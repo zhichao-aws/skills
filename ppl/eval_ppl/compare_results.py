@@ -2,6 +2,8 @@ import os
 import json
 import argparse
 
+from utils import eval_execution_accuracy, simple_parse
+
 
 def compare_results(ground_truth_file, to_eval_file, target_file):
     # Load the files
@@ -14,6 +16,7 @@ def compare_results(ground_truth_file, to_eval_file, target_file):
     syntax_errors = 0
     data_mismatches = 0
     length_mismatches = 0
+    error_compare = 0
     matches = 0
     mismatched_queries = []
 
@@ -36,42 +39,58 @@ def compare_results(ground_truth_file, to_eval_file, target_file):
         gt_rows = gt_sample["data_rows"]
         eval_rows = eval_sample["data_rows"]
 
-        # Compare based on number of elements in ground truth
-        if len(gt_rows) < 10 and len(gt_rows[0]) < 5:
-            # Require exact match
-            if gt_rows == eval_rows:
+        try:
+            if eval_execution_accuracy(
+                simple_parse(eval_rows, eval_sample["schema"]),
+                simple_parse(gt_rows, gt_sample["schema"]),
+            ):
                 matches += 1
             else:
-                mismatched_queries.append(
-                    {
-                        "question": gt_sample["question"],
-                        "target_index": gt_sample["target_index"],
-                        "now": gt_sample["now"],
-                        "ground_truth_query": gt_sample["query"],
-                        "eval_query": eval_sample["query"],
-                        "error": "Data Mismatch",
-                        "results": [gt_sample["data_rows"], eval_sample["data_rows"]],
-                    }
-                )
-        else:
-            # Check number of elements and first element length
-            if len(gt_rows) == len(eval_rows):
-                matches += 1
-            else:
-                mismatched_queries.append(
-                    {
-                        "question": gt_sample["question"],
-                        "target_index": gt_sample["target_index"],
-                        "now": gt_sample["now"],
-                        "ground_truth_query": gt_sample["query"],
-                        "eval_query": eval_sample["query"],
-                        "error": "Length Mismatch",
-                        "results": [
-                            len(gt_sample["data_rows"]),
-                            len(eval_sample["data_rows"]),
-                        ],
-                    }
-                )
+                if len(gt_rows) < 10:
+                    mismatched_queries.append(
+                        {
+                            "question": gt_sample["question"],
+                            "target_index": gt_sample["target_index"],
+                            "now": gt_sample["now"],
+                            "ground_truth_query": gt_sample["query"],
+                            "eval_query": eval_sample["query"],
+                            "error": "Data Mismatch",
+                            "results": [
+                                gt_sample["data_rows"],
+                                eval_sample["data_rows"],
+                            ],
+                        }
+                    )
+                else:
+                    mismatched_queries.append(
+                        {
+                            "question": gt_sample["question"],
+                            "target_index": gt_sample["target_index"],
+                            "now": gt_sample["now"],
+                            "ground_truth_query": gt_sample["query"],
+                            "eval_query": eval_sample["query"],
+                            "error": "Length Mismatch",
+                            "results": [
+                                len(gt_sample["data_rows"]),
+                                len(eval_sample["data_rows"]),
+                            ],
+                        }
+                    )
+        except:
+            mismatched_queries.append(
+                {
+                    "question": gt_sample["question"],
+                    "target_index": gt_sample["target_index"],
+                    "now": gt_sample["now"],
+                    "ground_truth_query": gt_sample["query"],
+                    "eval_query": eval_sample["query"],
+                    "error": "Error Compare",
+                    "results": [
+                        gt_sample["data_rows"][:2],
+                        eval_sample["data_rows"][:2],
+                    ],
+                }
+            )
 
     # Count different types of mismatches
     for mismatch in mismatched_queries:
@@ -79,6 +98,8 @@ def compare_results(ground_truth_file, to_eval_file, target_file):
             data_mismatches += 1
         elif mismatch["error"] == "Length Mismatch":
             length_mismatches += 1
+        elif mismatch["error"] == "Error Compare":
+            error_compare += 1
 
     # Calculate proportions
     syntax_error_rate = syntax_errors / total_count
@@ -96,6 +117,7 @@ def compare_results(ground_truth_file, to_eval_file, target_file):
         "syntax_errors": syntax_errors,
         "data_mismatches": data_mismatches,
         "length_mismatches": length_mismatches,
+        "error_compare": error_compare,
         "matches": matches,
         "mismatched_queries": mismatched_queries,
     }
