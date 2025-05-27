@@ -213,15 +213,15 @@ def process_and_index_files(dry_run=False):
                 # Get anchor field for the current index
                 anchor_field = anchor_time_fields.get(index_name, [])[0]
 
-                if anchor_field and anchor_field in date_fields:
-                    # Adjust time fields
-                    documents = adjust_time_fields(
-                        documents, date_fields, anchor_field, TIME_DELTA_DAYS
-                    )
-                else:
-                    logging.warning(
-                        f"No valid anchor field found for {index_name}. Skipping time adjustment."
-                    )
+                # if anchor_field and anchor_field in date_fields:
+                #     # Adjust time fields
+                #     documents = adjust_time_fields(
+                #         documents, date_fields, anchor_field, TIME_DELTA_DAYS
+                #     )
+                # else:
+                #     logging.warning(
+                #         f"No valid anchor field found for {index_name}. Skipping time adjustment."
+                #     )
 
                 if not dry_run:
                     # Create or recreate the index with the correct mapping
