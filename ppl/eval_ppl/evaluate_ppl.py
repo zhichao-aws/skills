@@ -1,8 +1,14 @@
 import os
 import json
 import argparse
+import logging
 from tqdm import tqdm
 from opensearchpy import OpenSearch
+
+# Set up logging
+logging.basicConfig(
+    level=logging.ERROR, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 # Read the Flow Framework API endpoint from the environment variable
 OPENSEARCH_HOST = os.environ.get("OPENSEARCH_HOST", "localhost:9200")
@@ -21,12 +27,13 @@ client = OpenSearch(
 )
 
 
-def run_ppl(query):
-    return json.dumps(
-        client.transport.perform_request(
-            "POST", "/_plugins/_ppl", body={"query": query}
-        )["datarows"]
-    )
+def run_ppl(sample):
+    query = sample["query"]
+    if "now" in sample:
+        query = query.replace("NOW()", sample["now"])
+    return client.transport.perform_request(
+        "POST", "/_plugins/_ppl", body={"query": query}
+    )["datarows"]
 
 
 from concurrent.futures import ThreadPoolExecutor
@@ -37,61 +44,50 @@ def evaluate_ppl(ppl_eval_file):
         samples = json.load(f)
 
     results = []
-    total_correct = 0
-    total_samples = len(samples)
 
-    def run_and_compare(sample):
-        generated_result = run_ppl(sample["generated_ppl"])
-        ground_truth_result = run_ppl(sample["ground_truth_ppl"])
-        is_correct = generated_result == ground_truth_result
-        return {
-            "question": sample["question"],
-            "generated_result": generated_result,
-            "ground_truth_result": ground_truth_result,
-            "is_correct": is_correct,
-        }, is_correct
+    def run(sample):
+        try:
+            generated_result = run_ppl(sample)
+            sample["data_rows"] = generated_result
+        except Exception as e:
+            logging.error(f"error when execute query: {sample['query']} {e}")
+            sample["data_rows"] = "ERROR"
 
-    with ThreadPoolExecutor() as executor:
-        results_and_correctness = list(
+        return sample
+
+    with ThreadPoolExecutor(max_workers=5) as executor:
+        results = list(
             tqdm(
-                executor.map(run_and_compare, samples),
+                executor.map(run, samples),
                 total=len(samples),
-                desc="Evaluating PPL",
+                desc="Running PPL",
             )
         )
 
-    for result, is_correct in results_and_correctness:
-        results.append(result)
-        if is_correct:
-            total_correct += 1
-
-    accuracy = total_correct / total_samples
-    return results, accuracy
+    return results
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Evaluate PPL queries.")
     parser.add_argument(
-        "--ppl_eval_file",
+        "--ppl_file",
         type=str,
         help="Input JSON file with generated PPL queries",
-        default="ppl_generated.json",
+        default="dataset/time_related_queries.json",
     )
     parser.add_argument(
-        "--ppl_eval_results",
+        "--output_file",
         type=str,
         help="output file",
-        default="ppl_eval_results.json",
+        default=None,
     )
 
     args = parser.parse_args()
+    if args.output_file is None:
+        args.output_file = os.path.join("results", args.ppl_file.replace("/", "-"))
 
-    results, accuracy = evaluate_ppl(args.ppl_eval_file)
-
-    print(f"Accuracy: {accuracy:.2%}")
+    results = evaluate_ppl(args.ppl_file)
 
     # Save results to a JSON file
-    with open(args.ppl_eval_results, "w") as f:
-        json.dump({"results": results, "accuracy": accuracy}, f, indent=2)
-
-    print(f"Results saved to {ppl_eval_results}")
+    with open(args.output_file, "w") as f:
+        json.dump(results, f, indent=4)

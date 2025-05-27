@@ -36,6 +36,7 @@ ml_commons_settings = {
             "^https://runtime\\.sagemaker\\..*[a-z0-9-]\\.amazonaws\\.com/.*$",
             "^https://bedrock.*",
         ],
+        "script.max_compilations_rate": "10000/1m"
     }
 }
 

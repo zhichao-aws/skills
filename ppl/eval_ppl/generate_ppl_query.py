@@ -29,7 +29,7 @@ from concurrent.futures import ThreadPoolExecutor
 def generate_ppl(samples):
     results = []
 
-    def fetch_ppl(sample):
+    def fetch_ppl(sample: dict):
         ppl = client.transport.perform_request(
             "POST",
             f"/_plugins/_ml/agents/{ppl_agent_id}/_execute",
@@ -41,11 +41,9 @@ def generate_ppl(samples):
             },
             params={"timeout": 60},
         )["inference_results"][0]["output"][0]["result"]
-        return {
-            "question": sample["question"],
-            "generated_ppl": json.loads(ppl)["ppl"],
-            "ground_truth_ppl": sample["query"],
-        }
+        sample["origin_query"] = sample.pop("query")
+        sample["query"] = json.loads(ppl)["ppl"]
+        return sample
 
     with ThreadPoolExecutor() as executor:
         results = list(tqdm(executor.map(fetch_ppl, samples)))
@@ -59,16 +57,19 @@ if __name__ == "__main__":
         "--input_file",
         type=str,
         help="Input JSON file with samples",
-        default="ppl_eval.json",
+        default="dataset/time_related_queries.json",
     )
     parser.add_argument(
         "--output_file",
         type=str,
         help="Output JSON file for generated PPL queries",
-        default="ppl_generated.json",
+        default=None,
     )
 
     args = parser.parse_args()
+    if args.output_file is None:
+        assert "dataset" in args.input_file
+        args.output_file = args.input_file.replace("dataset", "generated_ppls")
 
     with open(args.input_file) as f:
         samples = json.load(f)
