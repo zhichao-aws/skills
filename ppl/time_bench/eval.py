@@ -7,19 +7,29 @@ from tqdm import tqdm
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
-    "--version", type=str, default="v0", help="Version number of prompts"
+    "--prompt_file", type=str, default="prompts/v0.txt", help="prompt file"
+)
+parser.add_argument(
+    "--bench_file", type=str, default="../eval_ppl/dataset/abs_time_queries.json", help="benchmark dataset file"
 )
 args = parser.parse_args()
 
-with open(f"prompts/{args.version}.txt") as f:
+with open(args.prompt_file) as f:
     prompt = f.read()
 
-with open("time_bench.json") as f:
+with open(args.bench_file) as f:
     time_bench = json.load(f)
 
 # Function to process a single example
 def process_example(example, prompt):
-    return invoke(example["question"], example["now"], prompt)
+    params = {
+        "question": example["question"],
+        "current_time_iso": example["now"].replace("TIMESTAMP('", "").replace("')", ""),
+        "date_field": example["date_field"],
+        "other_date_fields": example["other_date_fields"]
+    }
+    
+    return invoke(prompt, **params)
 
 
 # Create a thread pool
@@ -28,16 +38,9 @@ thread_pool = ThreadPool(max_workers=2)
 # Use the thread pool to process all examples in parallel
 predicts = thread_pool.map_with_args(
     func=process_example,
-    items=time_bench,
+    items=time_bench[:1],
     fixed_args={"prompt": prompt},
     desc="Processing examples",
 )
 
-eval_res = evaluate_time_predictions(time_bench, predicts, True)
-
-with open(f"prompts/{args.version}_res.json", "w") as f:
-    json.dump(eval_res, f, indent=4)
-
-all_res = [(i, time_bench[i], predicts[i]) for i in range(len(time_bench))]
-with open(f"prompts/{args.version}_all.json", "w") as f:
-    json.dump(all_res, f, indent=4)
+print(predicts)

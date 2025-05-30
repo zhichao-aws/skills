@@ -1,0 +1,74 @@
+[
+    {
+        "question": "Show me all orders from last week with products created after 2016-12-20",
+        "target_index": "ecommerce",
+        "type": "3",
+        "now": "TIMESTAMP('2025-05-27 03:53:30')",
+        "date_field": "order_date",
+        "origin_query": "source=ecommerce\n| where order_date > DATE_SUB(NOW(), INTERVAL 1 WEEK)\n| where products.created_on >= '2016-12-20'\n| fields order_id, customer_full_name, order_date, products.product_name, products.created_on",
+        "query": "source=ecommerce| where `order_date` > DATE_SUB(NOW(), INTERVAL 1 WEEK) AND `products.created_on` > DATE('2016-12-20') | fields `order_id`, `products.product_name`, `products.created_on`"
+    },
+    {
+        "question": "Show me all orders with products created after 2016-12-20",
+        "target_index": "ecommerce",
+        "type": "3",
+        "now": "TIMESTAMP('2025-07-27 03:53:30')",
+        "date_field": "order_date",
+        "origin_query": "source=ecommerce\n| where products.created_on >= '2016-12-20'\n| fields order_id, customer_full_name, order_date, products.product_name, products.created_on",
+        "query": "source=ecommerce| where query_string(['products.created_on'], '2016-12-20') | fields `order_id`, `products.product_name`, `products.created_on`"
+    },
+    {
+        "question": "Count the number of orders placed in the last 6 month that contain products created in the last 9 years.",
+        "target_index": "ecommerce",
+        "type": "1",
+        "now": "TIMESTAMP('2025-12-20 03:53:30')",
+        "date_field": "order_date",
+        "origin_query": "source=ecommerce\n| where order_date > DATE_SUB(NOW(), INTERVAL 6 MONTH)\n|where products.created_on > DATE_SUB(NOW(), INTERVAL 9 YEAR)\n|  stats COUNT() as recent_product_orders",
+        "query": "source=ecommerce| where `order_date` > DATE_SUB(NOW(), INTERVAL 6 MONTH) AND `products.created_on` < DATE_SUB(NOW(), INTERVAL 9 YEAR) | stats COUNT() as order_count"
+    },
+    {
+        "question": "Count the number of orders that contain products created in the last 9 years.",
+        "target_index": "ecommerce",
+        "type": "1",
+        "now": "TIMESTAMP('2025-12-20 03:53:30')",
+        "date_field": "order_date",
+        "origin_query": "source=ecommerce\n| where products.created_on > DATE_SUB(NOW(), INTERVAL 9 YEAR)\n|  stats COUNT() as recent_product_orders",
+        "query": "source=ecommerce| where YEAR(`products.created_on`) >= YEAR(now()) - 9 | stats count() as order_count"
+    },
+    {
+        "question": "What is the average price of products created before 2016-12-15 that were ordered in the last week?",
+        "target_index": "ecommerce",
+        "type": "5",
+        "now": "TIMESTAMP('2025-05-27 03:53:30')",
+        "date_field": "order_date",
+        "origin_query": "source=ecommerce\n| where order_date > DATE_SUB(NOW(), INTERVAL 1 WEEK)\n| where products.created_on < '2016-12-15'\n| stats AVG(products.price) as avg_product_price",
+        "query": "source=ecommerce| where `products.created_on` < DATE('2016-12-15') AND `order_date` > DATE_SUB(NOW(), INTERVAL 1 WEEK) | stats AVG(`products.price`) as avg_price"
+    },
+    {
+        "question": "What is the average price of products created before 2016-12-15?",
+        "target_index": "ecommerce",
+        "type": "5",
+        "now": "TIMESTAMP('2025-05-27 03:53:30')",
+        "date_field": "order_date",
+        "origin_query": "source=ecommerce\n| where products.created_on < '2016-12-15'\n| stats AVG(products.price) as avg_product_price",
+        "query": "source=ecommerce| where DATE(`products.created_on`) < '2016-12-15' | stats avg(`products.price`) as avg_price"
+    },
+    {
+        "question": "List all unique product manufacturers for items created during 2016 12-10 and 12-15 that were sold in the last 30 days.",
+        "target_index": "ecommerce",
+        "type": "4",
+        "now": "TIMESTAMP('2025-05-27 03:53:30')",
+        "date_field": "order_date",
+        "origin_query": "source=ecommerce\n| where order_date > DATE_SUB(NOW(), INTERVAL 30 DAY)\n| where products.created_on >= '2016-12-10' AND products.created_on < '2016-12-16'\n| dedup products.manufacturer\n| fields products.manufacturer",
+        "query": "source=ecommerce| where YEAR(`products.created_on`) = 2016 AND DAY(`products.created_on`) >= 10 AND DAY(`products.created_on`) <= 15 AND `order_date` > DATE_SUB(NOW(), INTERVAL 30 DAY) | dedup `manufacturer` | fields `manufacturer`"
+    },
+    {
+        "question": "List all unique product manufacturers for items created during 2016 12-10 and 12-15",
+        "target_index": "ecommerce",
+        "type": "4",
+        "now": "TIMESTAMP('2025-05-27 03:53:30')",
+        "date_field": "order_date",
+        "origin_query": "source=ecommerce\n| where products.created_on >= '2016-12-10' AND products.created_on < '2016-12-16'\n| dedup products.manufacturer\n| fields products.manufacturer",
+        "query": "source=ecommerce| where YEAR(`products.created_on`) = 2016 AND DAY(`products.created_on`) >= 10 AND DAY(`products.created_on`) <= 15 | dedup `manufacturer` | fields `manufacturer`"
+    }
+]

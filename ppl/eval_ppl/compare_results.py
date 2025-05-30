@@ -46,7 +46,7 @@ def compare_results(ground_truth_file, to_eval_file, target_file):
             ):
                 matches += 1
             else:
-                if len(gt_rows) < 10:
+                if len(gt_rows) == len(eval_rows):
                     mismatched_queries.append(
                         {
                             "question": gt_sample["question"],
@@ -56,8 +56,8 @@ def compare_results(ground_truth_file, to_eval_file, target_file):
                             "eval_query": eval_sample["query"],
                             "error": "Data Mismatch",
                             "results": [
-                                gt_sample["data_rows"],
-                                eval_sample["data_rows"],
+                                gt_sample["data_rows"][:2],
+                                eval_sample["data_rows"][:2],
                             ],
                         }
                     )

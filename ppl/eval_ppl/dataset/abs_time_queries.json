@@ -5,7 +5,11 @@
         "query": "source=ecommerce \n| where DATE(order_date) = '2025-05-15'\n| fields customer_full_name, order_date, total_quantity, taxless_total_price",
         "type": "3",
         "now": "TIMESTAMP('2025-05-27 03:53:30')",
-        "date_field": "order_date"
+        "date_field": "order_date",
+        "other_date_fields": [
+            "customer_birth_date",
+            "products.created_on"
+        ]
     },
     {
         "question": "Count the number of orders placed between June 1, 2025 and June 7, 2025.",
@@ -13,7 +17,11 @@
         "query": "source=ecommerce\n| where DATE(order_date) >= '2025-06-01' AND DATE(order_date) <= '2025-06-07'\n| stats COUNT() as order_count",
         "type": "1",
         "now": "TIMESTAMP('2025-10-27 03:53:30')",
-        "date_field": "order_date"
+        "date_field": "order_date",
+        "other_date_fields": [
+            "customer_birth_date",
+            "products.created_on"
+        ]
     },
     {
         "question": "Find the average taxless total price for orders placed during July.",
@@ -21,7 +29,11 @@
         "query": "source=ecommerce\n| where DATE(order_date) >= '2025-07-01' AND DATE(order_date) < '2025-07-31'\n| stats AVG(taxless_total_price) as avg_price",
         "type": "5",
         "now": "TIMESTAMP('2025-08-27 03:53:30')",
-        "date_field": "order_date"
+        "date_field": "order_date",
+        "other_date_fields": [
+            "customer_birth_date",
+            "products.created_on"
+        ]
     },
     {
         "question": "Show me the daily trend of orders placed between June 10 and July 20, 2025.",
@@ -29,7 +41,11 @@
         "query": "source=ecommerce\n| where DATE(order_date) >= '2025-06-10' AND DATE(order_date) <= '2025-07-20'\n| stats count() as daily_orders by span(order_date, 1d)",
         "type": "7",
         "now": "TIMESTAMP('2025-09-27 03:53:30')",
-        "date_field": "order_date"
+        "date_field": "order_date",
+        "other_date_fields": [
+            "customer_birth_date",
+            "products.created_on"
+        ]
     },
     {
         "question": "List all unique customer IDs for orders placed on May 1, 2025.",
@@ -37,7 +53,11 @@
         "query": "source=ecommerce\n| where DATE(order_date) = '2025-05-01'\n| dedup customer_id\n| fields customer_id",
         "type": "4",
         "now": "TIMESTAMP('2025-05-27 03:53:30')",
-        "date_field": "order_date"
+        "date_field": "order_date",
+        "other_date_fields": [
+            "customer_birth_date",
+            "products.created_on"
+        ]
     },
     {
         "question": "How many flights departed between 9:00 AM and 5:00 PM on August 10, 2025?",
@@ -45,7 +65,8 @@
         "query": "source=flight\n| where DATE(timestamp) = '2025-08-10' AND HOUR(timestamp) >= 9 AND HOUR(timestamp) < 17\n| stats COUNT() as flight_count",
         "type": "1",
         "now": "TIMESTAMP('2025-08-27 03:53:30')",
-        "date_field": "timestamp"
+        "date_field": "timestamp",
+        "other_date_fields": []
     },
     {
         "question": "List all unique HTTP status codes in logs from May 20th",
@@ -53,7 +74,12 @@
         "query": "source=otel_logs\n| where DATE(endTime) = '2025-05-20'\n| dedup `span.attributes.http@status_code`\n| fields `span.attributes.http@status_code`",
         "type": "4",
         "now": "TIMESTAMP('2025-05-27 03:53:30')",
-        "date_field": "endTime"
+        "date_field": "endTime",
+        "other_date_fields": [
+            "events.time",
+            "startTime",
+            "traceGroupFields.endTime"
+        ]
     },
     {
         "question": "Show me hourly request counts for May 5, 2025.",
@@ -61,7 +87,10 @@
         "query": "source=sso_log\n| where DATE(@timestamp) = '2025-05-05'\n| stats count() as request_count by span(@timestamp, 1h)",
         "type": "7",
         "now": "TIMESTAMP('2025-05-27 03:53:30')",
-        "date_field": "@timestamp"
+        "date_field": "@timestamp",
+        "other_date_fields": [
+            "observerTime"
+        ]
     },
     {
         "question": "Calculate the average response time for requests between 8.15 to 8.20",
@@ -69,6 +98,11 @@
         "query": "source=otel_logs\n| where endTime >= '2025-08-15' AND endTime <= '2025-08-20'\n| stats avg(durationInNanos) as avg_response_time",
         "type": "5",
         "now": "TIMESTAMP('2025-11-27 03:53:30')",
-        "date_field": "endTime"
+        "date_field": "endTime",
+        "other_date_fields": [
+            "events.time",
+            "startTime",
+            "traceGroupFields.endTime"
+        ]
     }
 ]

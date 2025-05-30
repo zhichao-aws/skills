@@ -10,7 +10,7 @@ from typing import Dict, Any, Optional
 def setup_bedrock():
     session = boto3.Session(
         region_name=os.environ.get("AWS_REGION", "us-east-1"),
-        aws_access_key_id=os.environ.get("AWS_ACCESS_KEY", None),
+        aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID", None),
         aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY", None),
     )
     return session.client("bedrock-runtime")
@@ -30,7 +30,7 @@ def parse_tagged_string(text):
     result = {}
     for tag, value in matches:
         # 处理"null"值
-        if value.strip() == "null":
+        if value.strip() == "null" or value.strip() == "None":
             result[tag] = None
         else:
             result[tag] = value.strip()
@@ -39,14 +39,12 @@ def parse_tagged_string(text):
 
 
 def invoke(
-    q: str, cur_time: str, prompt: str, max_retries: int = 3, initial_delay: float = 1.0
+    prompt: str, max_retries: int = 3, initial_delay: float = 1.0, **kwargs
 ) -> Dict[str, Any]:
     """
     Invoke the Bedrock model with retry functionality.
 
     Args:
-        q: Question to ask
-        cur_time: Current time
         prompt: Prompt template
         max_retries: Maximum number of retry attempts (default: 3)
         initial_delay: Initial delay between retries in seconds (default: 1.0)
@@ -75,7 +73,7 @@ def invoke(
                                 "content": [
                                     {
                                         "type": "text",
-                                        "text": prompt.format(q=q, cur_time=cur_time),
+                                        "text": prompt.format(**kwargs),
                                     }
                                 ],
                             }
