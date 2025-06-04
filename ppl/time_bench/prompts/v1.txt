@@ -26,8 +26,10 @@ Follow these reasoning steps carefully:
    - Ignore time constraints related to {other_date_fields}
    - Ignore time references used for aggregation purposes (e.g., "count of events per day")
 
-4. CONVERT relative time expressions to absolute ISO format based on {current_time_iso}
-   - Example: "last month" for "2027-01-16 12:39:19" → 2026-12-16 12:39:19 to 2027-01-16 12:39:19
+4. CONVERT relative time expressions to absolute ISO format
+   - If it's abusolute time range, then just give the time 
+   - If it's relative time range, calculate the range based on {current_time_iso}. KEEP THE HOURS,MINUTE AND SENCONDS!
+      - Example: "last month" for "2027-01-16 12:39:19" → 2026-12-16 12:39:19 to 2027-01-16 12:39:19
 
 5. OUTPUT your result in XML format with the following structure:
    - If a time range is found: <start>ISO_START_DATE</start><end>ISO_END_DATE</end>
@@ -53,6 +55,7 @@ Example 2:
 
 Example 3:
 - User query: List the monthly users registration count
+- Current time: 2027-07-11 15:12:55
 - Time field: register_time
 - Other date fields: [created_at, updated_at]
 - Analysis: "monthly" is the aggregation constraints, not have impact on search scope.

@@ -1,8 +1,8 @@
 [
     {
-        "question": "Show me all orders placed on May 15",
+        "question": "Show me all orders id that placed on May 15",
         "target_index": "ecommerce",
-        "query": "source=ecommerce \n| where DATE(order_date) = '2025-05-15'\n| fields customer_full_name, order_date, total_quantity, taxless_total_price",
+        "query": "source=ecommerce \n| where DATE(order_date) = '2025-05-15'\n| fields order_id",
         "type": "3",
         "now": "TIMESTAMP('2025-05-27 03:53:30')",
         "date_field": "order_date",
@@ -93,7 +93,7 @@
         ]
     },
     {
-        "question": "Calculate the average response time for requests between 8.15 to 8.20",
+        "question": "Calculate the average response duration time for requests between 8-15th to 8-20th",
         "target_index": "otel_logs",
         "query": "source=otel_logs\n| where endTime >= '2025-08-15' AND endTime <= '2025-08-20'\n| stats avg(durationInNanos) as avg_response_time",
         "type": "5",

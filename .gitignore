@@ -12,6 +12,8 @@ out/
 .vscode
 bin/
 results
+generated_ppls
+dataset_parsed
 test.ipynb
 
 # Byte-compiled / optimized / DLL files

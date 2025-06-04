@@ -18,16 +18,21 @@ Follow these reasoning steps carefully:
 
 1. ANALYZE the query to identify any time-related expressions.
 
-2. DISTINGUISH between:
-   - Query-level time constraints that define the search scope
-   - Aggregation time references or constraints on metrics
+2. First DISTINGUISH the time expressions:
+   - Is query-level time constraints?
+   - Is Aggregation time references or constraints on metrics (e.g., "count of events per day")?
+      - If true, exit
 
-3. EXTRACT only time constraints that apply to the specified time field ({date_field}).
-   - Ignore time constraints related to {other_date_fields}
-   - Ignore time references used for aggregation purposes (e.g., "count of events per day")
+3. Only keep the query-level time constraints. Then DISTINGUISH:
+   - the constraints applies for field {date_field}?
+   - the constraints applies for field in {other_date_fields}?
+      - If true, exit
 
-4. CONVERT relative time expressions to absolute ISO format based on {current_time_iso}
-   - Example: "last month" for "2027-01-16 12:39:19" → 2026-12-16 12:39:19 to 2027-01-16 12:39:19
+4. For constraints on {date_field}, CONVERT relative time expressions to absolute ISO format
+   - **If it's not for {date_field}, just return None!**
+   - If it's abusolute time range, then just give the time 
+   - If it's relative time range, calculate the range based on {current_time_iso}. KEEP THE HOURS,MINUTE AND SENCONDS!
+      - Example: "last month" for "2027-01-16 12:39:19" → 2026-12-16 12:39:19 to 2027-01-16 12:39:19
 
 5. OUTPUT your result in XML format with the following structure:
    - If a time range is found: <start>ISO_START_DATE</start><end>ISO_END_DATE</end>

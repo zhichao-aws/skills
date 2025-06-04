@@ -72,7 +72,7 @@
         ]
     },
     {
-        "question": "List all unique product manufacturers for items created during 2016 12-10 and 12-15 that were sold in the last 30 days.",
+        "question": "List all unique product manufacturers for products created during 2016 12-10 and 12-15 that were sold in the last 30 days.",
         "target_index": "ecommerce",
         "query": "source=ecommerce\n| where order_date > DATE_SUB(NOW(), INTERVAL 30 DAY)\n| where products.created_on >= '2016-12-10' AND products.created_on < '2016-12-16'\n| dedup products.manufacturer\n| fields products.manufacturer",
         "type": "4",
@@ -84,7 +84,7 @@
         ]
     },
     {
-        "question": "List all unique product manufacturers for items created during 2016 12-10 and 12-15",
+        "question": "List all unique product manufacturers for products created during 2016 12-10 and 12-15",
         "target_index": "ecommerce",
         "query": "source=ecommerce\n| where products.created_on >= '2016-12-10' AND products.created_on < '2016-12-16'\n| dedup products.manufacturer\n| fields products.manufacturer",
         "type": "4",

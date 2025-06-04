@@ -3,7 +3,7 @@ import json
 from opensearchpy import OpenSearch
 from tqdm import tqdm
 import argparse
-from tqdm import tqdm
+from concurrent.futures import ThreadPoolExecutor
 
 # Read the Flow Framework API endpoint from the environment variable
 OPENSEARCH_HOST = os.environ.get("OPENSEARCH_HOST", "localhost:9200")
@@ -21,9 +21,6 @@ client = OpenSearch(
     verify_certs=False,
     ssl_show_warn=False,
 )
-
-
-from concurrent.futures import ThreadPoolExecutor
 
 
 def generate_ppl(samples):
@@ -54,29 +51,39 @@ def generate_ppl(samples):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate PPL queries.")
     parser.add_argument(
-        "--input_file",
+        "--input_root",
         type=str,
-        help="Input JSON file with samples",
-        default="dataset/time_related_queries.json",
+        help="Input root directory",
+        default="dataset",
     )
     parser.add_argument(
-        "--output_file",
+        "--bench_file",
         type=str,
-        help="Output JSON file for generated PPL queries",
-        default=None,
+        help="Input JSON filename",
+        default="time_related_queries.json",
+    )
+    parser.add_argument(
+        "--output_root",
+        type=str,
+        help="Output root directory",
+        default="generated_ppls",
     )
 
     args = parser.parse_args()
-    if args.output_file is None:
-        assert "dataset" in args.input_file
-        args.output_file = args.input_file.replace("dataset", "generated_ppls")
 
-    with open(args.input_file) as f:
+    # Construct full paths
+    input_path = os.path.join(args.input_root, args.bench_file)
+    output_path = os.path.join(args.output_root, args.bench_file)
+
+    # Ensure output directory exists
+    os.makedirs(args.output_root, exist_ok=True)
+
+    with open(input_path) as f:
         samples = json.load(f)
 
     results = generate_ppl(samples)
 
-    with open(args.output_file, "w") as f:
+    with open(output_path, "w") as f:
         json.dump(results, f, indent=4)
 
-    print(f"Generated PPL queries saved to {args.output_file}")
+    print(f"Generated PPL queries saved to {output_path}")

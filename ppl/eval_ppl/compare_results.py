@@ -129,15 +129,22 @@ def compare_results(ground_truth_file, to_eval_file, target_file):
 
 def main():
     parser = argparse.ArgumentParser(description="Compare PPL execution results.")
-    parser.add_argument(
-        "--ground_truth_file", help="Path to the ground truth JSON file"
-    )
-    parser.add_argument("--to_eval_file", help="Path to the file to evaluate")
-    parser.add_argument("--target_file", help="Path to write the comparison results")
+    parser.add_argument("--label_root", help="Path to the ground truth JSON file")
+    parser.add_argument("--results_root", help="Path to the file to evaluate")
+    parser.add_argument("--target_root", help="Path to the file to evaluate")
+    parser.add_argument("--bench_file", help="Path to write the comparison results")
 
     args = parser.parse_args()
-    os.makedirs(os.path.dirname(args.target_file), exist_ok=True)
-    compare_results(args.ground_truth_file, args.to_eval_file, args.target_file)
+    os.makedirs(args.target_root, exist_ok=True)
+
+    label_file = os.path.join(args.label_root, args.bench_file)
+    results_file = os.path.join(args.results_root, args.bench_file)
+    target_file = os.path.join(
+        args.target_root,
+        (args.label_root + "-" + args.results_root + "-" + args.bench_file).replace("/", "-"),
+    )
+    print(target_file)
+    compare_results(label_file, results_file, target_file)
 
 
 if __name__ == "__main__":

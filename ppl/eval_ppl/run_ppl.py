@@ -4,6 +4,7 @@ import argparse
 import logging
 from tqdm import tqdm
 from opensearchpy import OpenSearch
+from concurrent.futures import ThreadPoolExecutor
 
 # Set up logging
 logging.basicConfig(
@@ -38,10 +39,16 @@ def insert_after_first_pipe(query, insert_text):
 
 def run_ppl(sample):
     query = sample["query"]
-    if "date_field" in sample:
+    if "start" in sample and sample["start"] is not None:
         query = insert_after_first_pipe(
-            sample["query"], f"where {sample['date_field']} < NOW() "
+            query, f"where {sample['date_field']} >= TIMESTAMP('{sample['start']}') "
         )
+    if "end" in sample and sample["end"] is not None:
+        query = insert_after_first_pipe(
+            query, f"where {sample['date_field']} <= TIMESTAMP('{sample['end']}') "
+        )
+    if "date_field" in sample:
+        query = insert_after_first_pipe(query, f"where {sample['date_field']} < NOW() ")
     if "now" in sample:
         query = query.replace("NOW()", sample["now"])
     sample["query"] = query
@@ -58,11 +65,8 @@ def run_ppl(sample):
     return sample
 
 
-from concurrent.futures import ThreadPoolExecutor
-
-
-def evaluate_ppl(ppl_eval_file):
-    with open(ppl_eval_file) as f:
+def evaluate_ppl(ppl_path):
+    with open(ppl_path) as f:
         samples = json.load(f)
 
     results = []
@@ -82,24 +86,39 @@ def evaluate_ppl(ppl_eval_file):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Evaluate PPL queries.")
     parser.add_argument(
-        "--ppl_file",
+        "--ppl_root",
         type=str,
-        help="Input JSON file with generated PPL queries",
-        default="dataset/time_related_queries.json",
+        help="Root directory for PPL query files",
+        default="dataset",
     )
     parser.add_argument(
-        "--output_file",
+        "--bench_file",
         type=str,
-        help="output file",
-        default=None,
+        help="Input JSON filename with generated PPL queries",
+        default="time_related_queries.json",
+    )
+    parser.add_argument(
+        "--output_root",
+        type=str,
+        help="Output root directory",
+        default="results",
     )
 
     args = parser.parse_args()
-    if args.output_file is None:
-        args.output_file = os.path.join("results", args.ppl_file.replace("/", "-"))
 
-    results = evaluate_ppl(args.ppl_file)
+    # Construct full input path
+    ppl_path = os.path.join(args.ppl_root, args.bench_file)
+
+    # Construct full output path
+    output_path = os.path.join(args.output_root, args.bench_file)
+
+    # Ensure output directory exists
+    os.makedirs(args.output_root, exist_ok=True)
+
+    results = evaluate_ppl(ppl_path)
 
     # Save results to a JSON file
-    with open(args.output_file, "w") as f:
+    with open(output_path, "w") as f:
         json.dump(results, f, indent=4)
+
+    print(f"Evaluation results saved to {output_path}")
