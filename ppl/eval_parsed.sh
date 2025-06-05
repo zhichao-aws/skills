@@ -1,7 +1,7 @@
 set -e
 
 # Define file and directory variables
-BENCH_FILE="time_related_queries.json"
+BENCH_FILE="non_time_related_queries.json"
 EVAL_DIR="eval_ppl"
 DATASET_DIR="dataset"
 DATASET_PARSED_DIR="dataset_parsed"

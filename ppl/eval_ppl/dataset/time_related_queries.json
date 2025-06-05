@@ -9,6 +9,10 @@
         "other_date_fields": [
             "customer_birth_date",
             "products.created_on"
+        ],
+        "time_range": [
+            "2024-11-27 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -21,6 +25,10 @@
         "other_date_fields": [
             "customer_birth_date",
             "products.created_on"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -33,6 +41,10 @@
         "other_date_fields": [
             "customer_birth_date",
             "products.created_on"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -45,6 +57,10 @@
         "other_date_fields": [
             "customer_birth_date",
             "products.created_on"
+        ],
+        "time_range": [
+            "2024-11-27 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -57,6 +73,10 @@
         "other_date_fields": [
             "customer_birth_date",
             "products.created_on"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -69,6 +89,10 @@
         "other_date_fields": [
             "customer_birth_date",
             "products.created_on"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -81,6 +105,10 @@
         "other_date_fields": [
             "customer_birth_date",
             "products.created_on"
+        ],
+        "time_range": [
+            "2025-02-27 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -93,6 +121,10 @@
         "other_date_fields": [
             "customer_birth_date",
             "products.created_on"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -105,6 +137,10 @@
         "other_date_fields": [
             "customer_birth_date",
             "products.created_on"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -117,6 +153,10 @@
         "other_date_fields": [
             "customer_birth_date",
             "products.created_on"
+        ],
+        "time_range": [
+            null,
+            null
         ]
     },
     {
@@ -129,6 +169,10 @@
         "other_date_fields": [
             "customer_birth_date",
             "products.created_on"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -141,6 +185,10 @@
         "other_date_fields": [
             "customer_birth_date",
             "products.created_on"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -153,6 +201,10 @@
         "other_date_fields": [
             "customer_birth_date",
             "products.created_on"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -165,6 +217,10 @@
         "other_date_fields": [
             "customer_birth_date",
             "products.created_on"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -177,6 +233,10 @@
         "other_date_fields": [
             "customer_birth_date",
             "products.created_on"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -186,7 +246,11 @@
         "type": "3",
         "now": "TIMESTAMP('2025-05-27 03:53:30')",
         "date_field": "timestamp",
-        "other_date_fields": []
+        "other_date_fields": [],
+        "time_range": [
+            null,
+            null
+        ]
     },
     {
         "question": "Show me the weekly trend of total flight count in the last month.",
@@ -195,7 +259,11 @@
         "type": "7",
         "now": "TIMESTAMP('2025-05-27 03:53:30')",
         "date_field": "timestamp",
-        "other_date_fields": []
+        "other_date_fields": [],
+        "time_range": [
+            "2025-04-27 03:53:30",
+            "2025-05-27 03:53:30"
+        ]
     },
     {
         "question": "List the number of flights that departed from Frankfurt am Main Airport (FRA) last week.",
@@ -204,7 +272,11 @@
         "type": "3",
         "now": "TIMESTAMP('2025-05-27 03:53:30')",
         "date_field": "timestamp",
-        "other_date_fields": []
+        "other_date_fields": [],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
+        ]
     },
     {
         "question": "Find the ratio of flights that were canceled in the last 3 months.",
@@ -213,7 +285,11 @@
         "type": "8",
         "now": "TIMESTAMP('2025-05-27 03:53:30')",
         "date_field": "timestamp",
-        "other_date_fields": []
+        "other_date_fields": [],
+        "time_range": [
+            "2025-02-27 03:53:30",
+            "2025-05-27 03:53:30"
+        ]
     },
     {
         "question": "What is the ratio of flights with destination weather being rain in the last 2 months?",
@@ -222,7 +298,11 @@
         "type": "8",
         "now": "TIMESTAMP('2025-05-27 03:53:30')",
         "date_field": "timestamp",
-        "other_date_fields": []
+        "other_date_fields": [],
+        "time_range": [
+            "2025-03-27 03:53:30",
+            "2025-05-27 03:53:30"
+        ]
     },
     {
         "question": "Show me the monthly trend of the number of cancelled flights in the last year.",
@@ -231,7 +311,11 @@
         "type": "7",
         "now": "TIMESTAMP('2026-07-27 12:34:56')",
         "date_field": "timestamp",
-        "other_date_fields": []
+        "other_date_fields": [],
+        "time_range": [
+            "2025-07-27 12:34:56",
+            "2026-07-27 12:34:56"
+        ]
     },
     {
         "question": "Find the ratio of flight delays in the last week.",
@@ -240,7 +324,11 @@
         "type": "8",
         "now": "TIMESTAMP('2025-05-27 03:53:30')",
         "date_field": "timestamp",
-        "other_date_fields": []
+        "other_date_fields": [],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
+        ]
     },
     {
         "question": "Show me the daily trend of the total flight distance in the last month.",
@@ -249,7 +337,11 @@
         "type": "7",
         "now": "TIMESTAMP('2025-05-27 03:53:30')",
         "date_field": "timestamp",
-        "other_date_fields": []
+        "other_date_fields": [],
+        "time_range": [
+            "2025-04-27 03:53:30",
+            "2025-05-27 03:53:30"
+        ]
     },
     {
         "question": "List all flights that departed from Frankfurt am Main Airport on a sunny day.",
@@ -258,7 +350,11 @@
         "type": "3",
         "now": "TIMESTAMP('2025-05-27 03:53:30')",
         "date_field": "timestamp",
-        "other_date_fields": []
+        "other_date_fields": [],
+        "time_range": [
+            null,
+            null
+        ]
     },
     {
         "question": "How many unique destination airports for flights last week?",
@@ -267,7 +363,11 @@
         "type": "2",
         "now": "TIMESTAMP('2025-05-27 03:53:30')",
         "date_field": "timestamp",
-        "other_date_fields": []
+        "other_date_fields": [],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
+        ]
     },
     {
         "question": "Show me the weekly trend of the average DistanceKilometers in the last 3 months.",
@@ -276,7 +376,11 @@
         "type": "7",
         "now": "TIMESTAMP('2025-05-27 03:53:30')",
         "date_field": "timestamp",
-        "other_date_fields": []
+        "other_date_fields": [],
+        "time_range": [
+            "2025-02-27 03:53:30",
+            "2025-05-27 03:53:30"
+        ]
     },
     {
         "question": "Find the ratio of flights where the origin country is Germany in the last 3 months.",
@@ -285,7 +389,11 @@
         "type": "8",
         "now": "TIMESTAMP('2025-05-27 03:53:30')",
         "date_field": "timestamp",
-        "other_date_fields": []
+        "other_date_fields": [],
+        "time_range": [
+            "2025-02-27 03:53:30",
+            "2025-05-27 03:53:30"
+        ]
     },
     {
         "question": "Show me the monthly trend of the number of documents in the last 6 months.",
@@ -296,6 +404,10 @@
         "date_field": "timestamp",
         "other_date_fields": [
             "utc_time"
+        ],
+        "time_range": [
+            "2024-11-27 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -307,6 +419,10 @@
         "date_field": "timestamp",
         "other_date_fields": [
             "utc_time"
+        ],
+        "time_range": [
+            "2025-04-27 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -318,6 +434,10 @@
         "date_field": "timestamp",
         "other_date_fields": [
             "utc_time"
+        ],
+        "time_range": [
+            "2025-02-27 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -329,6 +449,10 @@
         "date_field": "utc_time",
         "other_date_fields": [
             "timestamp"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -340,6 +464,10 @@
         "date_field": "timestamp",
         "other_date_fields": [
             "utc_time"
+        ],
+        "time_range": [
+            "2025-05-27 03:48:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -351,6 +479,10 @@
         "date_field": "timestamp",
         "other_date_fields": [
             "utc_time"
+        ],
+        "time_range": [
+            "2025-04-27 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -362,6 +494,10 @@
         "date_field": "timestamp",
         "other_date_fields": [
             "utc_time"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -373,6 +509,10 @@
         "date_field": "timestamp",
         "other_date_fields": [
             "utc_time"
+        ],
+        "time_range": [
+            null,
+            null
         ]
     },
     {
@@ -384,6 +524,10 @@
         "date_field": "timestamp",
         "other_date_fields": [
             "utc_time"
+        ],
+        "time_range": [
+            "2025-05-26 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -395,6 +539,10 @@
         "date_field": "timestamp",
         "other_date_fields": [
             "utc_time"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -406,6 +554,10 @@
         "date_field": "timestamp",
         "other_date_fields": [
             "utc_time"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -417,6 +569,10 @@
         "date_field": "timestamp",
         "other_date_fields": [
             "utc_time"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -428,6 +584,10 @@
         "date_field": "timestamp",
         "other_date_fields": [
             "utc_time"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -439,6 +599,10 @@
         "date_field": "timestamp",
         "other_date_fields": [
             "utc_time"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -450,6 +614,10 @@
         "date_field": "utc_time",
         "other_date_fields": [
             "timestamp"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -461,6 +629,10 @@
         "date_field": "utc_time",
         "other_date_fields": [
             "timestamp"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -474,6 +646,10 @@
             "events.time",
             "startTime",
             "traceGroupFields.endTime"
+        ],
+        "time_range": [
+            "2025-10-22 07:43:30",
+            "2025-10-23 07:43:30"
         ]
     },
     {
@@ -487,6 +663,10 @@
             "events.time",
             "startTime",
             "traceGroupFields.endTime"
+        ],
+        "time_range": [
+            "2025-10-22 07:43:30",
+            "2025-10-23 07:43:30"
         ]
     },
     {
@@ -500,6 +680,10 @@
             "events.time",
             "startTime",
             "traceGroupFields.endTime"
+        ],
+        "time_range": [
+            "2025-10-22 07:43:30",
+            "2025-10-23 07:43:30"
         ]
     },
     {
@@ -513,6 +697,10 @@
             "endTime",
             "events.time",
             "traceGroupFields.endTime"
+        ],
+        "time_range": [
+            "2025-10-22 07:43:30",
+            "2025-10-23 07:43:30"
         ]
     },
     {
@@ -526,6 +714,10 @@
             "events.time",
             "startTime",
             "traceGroupFields.endTime"
+        ],
+        "time_range": [
+            "2025-10-22 07:43:30",
+            "2025-10-23 07:43:30"
         ]
     },
     {
@@ -539,6 +731,10 @@
             "events.time",
             "startTime",
             "traceGroupFields.endTime"
+        ],
+        "time_range": [
+            "2025-10-22 07:43:30",
+            "2025-10-23 07:43:30"
         ]
     },
     {
@@ -552,6 +748,10 @@
             "events.time",
             "startTime",
             "traceGroupFields.endTime"
+        ],
+        "time_range": [
+            "2025-10-22 07:43:30",
+            "2025-10-23 07:43:30"
         ]
     },
     {
@@ -565,6 +765,10 @@
             "endTime",
             "events.time",
             "traceGroupFields.endTime"
+        ],
+        "time_range": [
+            "2025-10-22 07:43:30",
+            "2025-10-23 07:43:30"
         ]
     },
     {
@@ -578,6 +782,10 @@
             "events.time",
             "startTime",
             "traceGroupFields.endTime"
+        ],
+        "time_range": [
+            "2025-09-23 07:43:30",
+            "2025-10-23 07:43:30"
         ]
     },
     {
@@ -591,6 +799,10 @@
             "events.time",
             "startTime",
             "traceGroupFields.endTime"
+        ],
+        "time_range": [
+            "2025-04-23 07:43:30",
+            "2025-10-23 07:43:30"
         ]
     },
     {
@@ -604,6 +816,10 @@
             "events.time",
             "startTime",
             "traceGroupFields.endTime"
+        ],
+        "time_range": [
+            "2025-10-16 07:43:30",
+            "2025-10-23 07:43:30"
         ]
     },
     {
@@ -617,6 +833,10 @@
             "events.time",
             "startTime",
             "traceGroupFields.endTime"
+        ],
+        "time_range": [
+            "2025-10-16 07:43:30",
+            "2025-10-23 07:43:30"
         ]
     },
     {
@@ -630,6 +850,10 @@
             "events.time",
             "startTime",
             "traceGroupFields.endTime"
+        ],
+        "time_range": [
+            "2025-10-22 07:43:30",
+            "2025-10-23 07:43:30"
         ]
     },
     {
@@ -643,6 +867,10 @@
             "events.time",
             "startTime",
             "traceGroupFields.endTime"
+        ],
+        "time_range": [
+            "2025-10-23 07:38:30",
+            "2025-10-23 07:43:30"
         ]
     },
     {
@@ -656,6 +884,10 @@
             "events.time",
             "startTime",
             "traceGroupFields.endTime"
+        ],
+        "time_range": [
+            "2025-09-23 07:43:30",
+            "2025-10-23 07:43:30"
         ]
     },
     {
@@ -669,6 +901,10 @@
             "events.time",
             "startTime",
             "traceGroupFields.endTime"
+        ],
+        "time_range": [
+            "2025-10-23 07:38:30",
+            "2025-10-23 07:43:30"
         ]
     },
     {
@@ -682,6 +918,10 @@
             "endTime",
             "events.time",
             "traceGroupFields.endTime"
+        ],
+        "time_range": [
+            "2025-10-23 07:38:30",
+            "2025-10-23 07:43:30"
         ]
     },
     {
@@ -695,6 +935,10 @@
             "events.time",
             "startTime",
             "traceGroupFields.endTime"
+        ],
+        "time_range": [
+            "2025-10-20 07:43:30",
+            "2025-10-23 07:43:30"
         ]
     },
     {
@@ -708,6 +952,10 @@
             "endTime",
             "events.time",
             "traceGroupFields.endTime"
+        ],
+        "time_range": [
+            "2025-10-23 06:43:30",
+            "2025-10-23 07:43:30"
         ]
     },
     {
@@ -721,6 +969,10 @@
             "events.time",
             "startTime",
             "traceGroupFields.endTime"
+        ],
+        "time_range": [
+            "2025-10-22 07:43:30",
+            "2025-10-23 07:43:30"
         ]
     },
     {
@@ -734,6 +986,10 @@
             "endTime",
             "events.time",
             "traceGroupFields.endTime"
+        ],
+        "time_range": [
+            "2025-10-23 06:43:30",
+            "2025-10-23 07:43:30"
         ]
     },
     {
@@ -747,6 +1003,10 @@
             "events.time",
             "startTime",
             "traceGroupFields.endTime"
+        ],
+        "time_range": [
+            "2025-10-22 07:43:30",
+            "2025-10-23 07:43:30"
         ]
     },
     {
@@ -760,6 +1020,10 @@
             "endTime",
             "events.time",
             "traceGroupFields.endTime"
+        ],
+        "time_range": [
+            "2025-10-23 06:43:30",
+            "2025-10-23 07:43:30"
         ]
     },
     {
@@ -773,6 +1037,10 @@
             "endTime",
             "events.time",
             "traceGroupFields.endTime"
+        ],
+        "time_range": [
+            "2025-10-23 06:43:30",
+            "2025-10-23 07:43:30"
         ]
     },
     {
@@ -786,6 +1054,10 @@
             "events.time",
             "startTime",
             "traceGroupFields.endTime"
+        ],
+        "time_range": [
+            "2025-09-23 07:43:30",
+            "2025-10-23 07:43:30"
         ]
     },
     {
@@ -797,6 +1069,10 @@
         "date_field": "@timestamp",
         "other_date_fields": [
             "observerTime"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -808,6 +1084,10 @@
         "date_field": "@timestamp",
         "other_date_fields": [
             "observerTime"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -819,6 +1099,10 @@
         "date_field": "@timestamp",
         "other_date_fields": [
             "observerTime"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -830,6 +1114,10 @@
         "date_field": "@timestamp",
         "other_date_fields": [
             "observerTime"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -841,6 +1129,10 @@
         "date_field": "@timestamp",
         "other_date_fields": [
             "observerTime"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -852,6 +1144,10 @@
         "date_field": "@timestamp",
         "other_date_fields": [
             "observerTime"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -863,6 +1159,10 @@
         "date_field": "@timestamp",
         "other_date_fields": [
             "observerTime"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -874,6 +1174,10 @@
         "date_field": "@timestamp",
         "other_date_fields": [
             "observerTime"
+        ],
+        "time_range": [
+            "2025-04-27 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -885,6 +1189,10 @@
         "date_field": "@timestamp",
         "other_date_fields": [
             "observerTime"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -896,6 +1204,10 @@
         "date_field": "@timestamp",
         "other_date_fields": [
             "observerTime"
+        ],
+        "time_range": [
+            "2025-04-27 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -907,6 +1219,10 @@
         "date_field": "@timestamp",
         "other_date_fields": [
             "observerTime"
+        ],
+        "time_range": [
+            "2025-05-26 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -918,6 +1234,10 @@
         "date_field": "@timestamp",
         "other_date_fields": [
             "observerTime"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -929,6 +1249,10 @@
         "date_field": "@timestamp",
         "other_date_fields": [
             "observerTime"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -940,6 +1264,10 @@
         "date_field": "@timestamp",
         "other_date_fields": [
             "observerTime"
+        ],
+        "time_range": [
+            null,
+            null
         ]
     },
     {
@@ -951,6 +1279,10 @@
         "date_field": "@timestamp",
         "other_date_fields": [
             "observerTime"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -962,6 +1294,10 @@
         "date_field": "@timestamp",
         "other_date_fields": [
             "observerTime"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -973,6 +1309,10 @@
         "date_field": "@timestamp",
         "other_date_fields": [
             "observerTime"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -984,6 +1324,10 @@
         "date_field": "@timestamp",
         "other_date_fields": [
             "observerTime"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -995,6 +1339,10 @@
         "date_field": "@timestamp",
         "other_date_fields": [
             "observerTime"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -1006,6 +1354,10 @@
         "date_field": "@timestamp",
         "other_date_fields": [
             "observerTime"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     }
 ]
