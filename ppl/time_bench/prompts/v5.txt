@@ -32,8 +32,8 @@ Output 1:
    - "from last week" modifies "orders" → maps to order_date
    - "created after 2020" modifies "products" → maps to product_created_date
 4. Time expressions classification:
-   - ignored expressions: ["created after 2020"]
-   - time expressions map to order_date: ["from last week"]
+   4a. ignored expressions: ["created after 2020"]
+   4b. time expressions map to order_date: ["from last week"]
 </analysis>
 <start>2012-04-30 05:32:24</start>
 <end>2012-05-07 05:32:24</end>
@@ -55,8 +55,8 @@ Output 2:
    - "the past month" modifies "logs" → maps to log_timestamp
    - "per day" is an aggregation instruction, not a time filter
 4. Time expressions classification:
-   - ignored expressions: []
-   - time expressions map to log_timestamp: ["the past month"]
+   4a. ignored expressions: []
+   4b. time expressions map to log_timestamp: ["the past month"]
 </analysis>
 <start>2025-04-27 03:53:30</start>
 <end>2025-05-27 03:53:30</end>
@@ -77,8 +77,8 @@ Output 3:
 3. Semantic context analysis:
    - "monthly" is an aggregation instruction indicating how to group the registration counts, not a time range filter
 4. Time expressions classification:
-   - ignored expressions: []
-   - time expressions map to register_time: []
+   4a. ignored expressions: []
+   4b. time expressions map to register_time: []
 </analysis>
 <start>None</start>
 <end>None</end>
@@ -99,8 +99,8 @@ Output 4:
 3. Semantic context analysis:
    - No time expressions found in the query
 4. Time expressions classification:
-   - ignored expressions: []
-   - time expressions map to transaction_date: []
+   4a. ignored expressions: []
+   4b. time expressions map to transaction_date: []
 </analysis>
 <start>None</start>
 <end>None</end>
@@ -115,15 +115,20 @@ Provide your analysis and result in this XML format:
 1. Time expressions identified: [list all time expressions found]
 2. After filtering aggregation references: [list remaining expressions]
 3. Semantic context analysis:
-   - [For remaining expression after step 2, explain which entity it modifies and which field it maps to; or the map is unclear]
+   - [For remaining expression, explain which entity it modifies and which field it maps to; or the map is unclear]
+   (NEVER analysis the aggregation references)
 4. Time expressions classification:
-   - ignored expressions: [time expressions map to {other_date_fields} and unclear expressions]
-   - time expressions map to {date_field}: [time expressions map to {date_field}]
+   4a. ignored expressions: [time expressions map to {other_date_fields} and unclear expressions]
+   4b. time expressions CLEARLY map to {date_field}: [time expressions map to {date_field}]
 </analysis>
+<has_time>
+[whether has time filter on {date_field}. In other words, 4b. output != []. boolean]
+</has_time>
 <start>
-[Either an iso time string [yyyy-MM-dd HH:mm:ss] or [None]]
+[start time on {date_field} : yyyy-MM-dd HH:mm:ss || None]
+(Only pick from step 4.b)
 </start>
 <end>
-[Either an iso time string [yyyy-MM-dd HH:mm:ss] or [None]]
+[end time on {date_field} : yyyy-MM-dd HH:mm:ss || None]
 </end>
 </output_format>

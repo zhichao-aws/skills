@@ -9,6 +9,10 @@
         "other_date_fields": [
             "customer_birth_date",
             "products.created_on"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -21,6 +25,10 @@
         "other_date_fields": [
             "customer_birth_date",
             "products.created_on"
+        ],
+        "time_range": [
+            null,
+            null
         ]
     },
     {
@@ -33,6 +41,10 @@
         "other_date_fields": [
             "customer_birth_date",
             "products.created_on"
+        ],
+        "time_range": [
+            "2025-06-20 03:53:30",
+            "2025-12-20 03:53:30"
         ]
     },
     {
@@ -45,6 +57,10 @@
         "other_date_fields": [
             "customer_birth_date",
             "products.created_on"
+        ],
+        "time_range": [
+            null,
+            null
         ]
     },
     {
@@ -57,6 +73,10 @@
         "other_date_fields": [
             "customer_birth_date",
             "products.created_on"
+        ],
+        "time_range": [
+            "2025-05-20 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -69,6 +89,10 @@
         "other_date_fields": [
             "customer_birth_date",
             "products.created_on"
+        ],
+        "time_range": [
+            null,
+            null
         ]
     },
     {
@@ -81,6 +105,10 @@
         "other_date_fields": [
             "customer_birth_date",
             "products.created_on"
+        ],
+        "time_range": [
+            "2025-04-27 03:53:30",
+            "2025-05-27 03:53:30"
         ]
     },
     {
@@ -93,6 +121,10 @@
         "other_date_fields": [
             "customer_birth_date",
             "products.created_on"
+        ],
+        "time_range": [
+            null,
+            null
         ]
     }
 ]

@@ -9,6 +9,10 @@
         "other_date_fields": [
             "customer_birth_date",
             "products.created_on"
+        ],
+        "time_range": [
+            "2025-05-15 00:00:00",
+            "2025-05-15 23:59:59"
         ]
     },
     {
@@ -21,6 +25,10 @@
         "other_date_fields": [
             "customer_birth_date",
             "products.created_on"
+        ],
+        "time_range": [
+            "2025-06-01 00:00:00",
+            "2025-06-07 23:59:59"
         ]
     },
     {
@@ -33,6 +41,10 @@
         "other_date_fields": [
             "customer_birth_date",
             "products.created_on"
+        ],
+        "time_range": [
+            "2025-07-01 00:00:00",
+            "2025-07-31 23:59:59"
         ]
     },
     {
@@ -45,6 +57,10 @@
         "other_date_fields": [
             "customer_birth_date",
             "products.created_on"
+        ],
+        "time_range": [
+            "2025-06-10 00:00:00",
+            "2025-07-20 23:59:59"
         ]
     },
     {
@@ -57,6 +73,10 @@
         "other_date_fields": [
             "customer_birth_date",
             "products.created_on"
+        ],
+        "time_range": [
+            "2025-05-01 00:00:00",
+            "2025-05-01 23:59:59"
         ]
     },
     {
@@ -66,10 +86,14 @@
         "type": "1",
         "now": "TIMESTAMP('2025-08-27 03:53:30')",
         "date_field": "timestamp",
-        "other_date_fields": []
+        "other_date_fields": [],
+        "time_range": [
+            "2025-08-10 09:00:00",
+            "2025-08-10 17:00:00"
+        ]
     },
     {
-        "question": "List all unique HTTP status codes in logs from May 20th",
+        "question": "List all unique HTTP status codes in logs of May 20th",
         "target_index": "otel_logs",
         "query": "source=otel_logs\n| where DATE(endTime) = '2025-05-20'\n| dedup `span.attributes.http@status_code`\n| fields `span.attributes.http@status_code`",
         "type": "4",
@@ -79,6 +103,10 @@
             "events.time",
             "startTime",
             "traceGroupFields.endTime"
+        ],
+        "time_range": [
+            "2025-05-20 00:00:00",
+            "2025-05-20 23:59:59"
         ]
     },
     {
@@ -90,6 +118,10 @@
         "date_field": "@timestamp",
         "other_date_fields": [
             "observerTime"
+        ],
+        "time_range": [
+            "2025-05-05 00:00:00",
+            "2025-05-05 23:59:59"
         ]
     },
     {
@@ -103,6 +135,10 @@
             "events.time",
             "startTime",
             "traceGroupFields.endTime"
+        ],
+        "time_range": [
+            "2025-08-15 00:00:00",
+            "2025-08-20 23:59:59"
         ]
     }
 ]

@@ -1,0 +1,450 @@
+[
+  {
+    "question": "What is the average response time for each API endpoint in our application over the last hour?",
+    "target_index": "api_logs",
+    "query": "source=api_logs \n| where timestamp > now() - 1h \n| stats avg(response_time) as avg_response_time by endpoint",
+    "type": "3",
+    "now": "TIMESTAMP('2015-08-31 09:47:56')",
+    "date_field": "timestamp",
+    "other_date_fields": [
+      "customer_birth_date",
+      "products.created_on"
+    ],
+    "time_range": [
+      "2015-08-31 08:47:56",
+      "2015-08-31 09:47:56"
+    ]
+  },
+  {
+    "question": "What is the CPU, memory, and disk usage across our three main server clusters over the last 24 hours?",
+    "target_index": "server_metrics",
+    "query": "source=server_metrics \n| where timestamp > now() - 24h \n| stats avg(cpu_usage) as avg_cpu, avg(memory_usage) as avg_memory, avg(disk_usage) as avg_disk by cluster",
+    "type": "3",
+    "now": "TIMESTAMP('2012-05-07 05:32:24')",
+    "date_field": "timestamp",
+    "other_date_fields": [
+      "customer_birth_date",
+      "products.created_on"
+    ],
+    "time_range": [
+      "2012-05-06 05:32:24",
+      "2012-05-07 05:32:24"
+    ]
+  },
+  {
+    "question": "What is the distribution of different types of system errors across months?",
+    "target_index": "system_logs",
+    "query": "source = system_logs \n| stats count() by span(timestamp, 1M) as month, error_type",
+    "type": "3",
+    "now": "TIMESTAMP('2024-07-29 20:14:04')",
+    "date_field": "timestamp",
+    "other_date_fields": [
+      "customer_birth_date",
+      "products.created_on"
+    ],
+    "time_range": [
+        null,
+        null
+    ]
+  },
+  {
+    "question": "What is the distribution of different HTTP status codes in our web server logs over the last hour?",
+    "target_index": "web_server_logs",
+    "query": "source=web_server_logs \n| where timestamp > now() - 1h \n| stats count() as request_count by status_code",
+    "type": "3",
+    "now": "TIMESTAMP('2015-06-14 06:06:16')",
+    "date_field": "timestamp",
+    "other_date_fields": [
+      "customer_birth_date",
+      "products.created_on"
+    ],
+    "time_range": [
+      "2015-06-14 05:06:16",
+      "2015-06-14 06:06:16"
+    ]
+  },
+  {
+    "question": "How has the error count of our main microservices changed over the last 24 hours?",
+    "target_index": "microservices_logs",
+    "query": "source=microservices_logs \n| where timestamp > now() - 24h \n| where level = 'ERROR' \n| stats count() as error_count by timestamp, service_name",
+    "type": "3",
+    "now": "TIMESTAMP('2005-12-19 11:24:06')",
+    "date_field": "timestamp",
+    "other_date_fields": [
+      "customer_birth_date",
+      "products.created_on"
+    ],
+    "time_range": [
+      "2005-12-18 11:24:06",
+      "2005-12-19 11:24:06"
+    ]
+  },
+  {
+    "question": "What is the daily average latency for our critical services over the past year?",
+    "target_index": "service_metrics",
+    "query": "source=service_metrics \n| where timestamp > now() - 1y \n| where service in ('auth', 'api', 'database', 'cache') \n| stats avg(latency) as avg_latency by date_format(timestamp, 'yyyy-MM-dd') as date, service",
+    "type": "3",
+    "now": "TIMESTAMP('2014-01-15 12:53:25')",
+    "date_field": "timestamp",
+    "other_date_fields": [
+      "customer_birth_date",
+      "products.created_on"
+    ],
+    "time_range": [
+      "2013-01-15 12:53:25",
+      "2014-01-15 12:53:25"
+    ]
+  },
+  {
+    "question": "What is the relationship between request latency and error rate for our microservices, categorized by service type?",
+    "target_index": "microservices_metrics",
+    "query": "source=microservices_metrics \n| stats avg(latency) as avg_latency, avg(error_rate) as avg_error_rate by service_name, service_type",
+    "type": "3",
+    "now": "TIMESTAMP('2018-07-10 16:01:28')",
+    "date_field": "timestamp",
+    "other_date_fields": [
+      "customer_birth_date",
+      "products.created_on"
+    ],
+    "time_range": [
+        null,
+        null
+    ]
+  },
+  {
+    "question": "What is the average latency at 1 minute granularity by service?",
+    "target_index": "index",
+    "query": "source=index \n| stats avg(duration) as avg_duration by span(timestamp, 1m), `process.serviceName`",
+    "type": "3",
+    "now": "TIMESTAMP('2009-11-21 14:32:06')",
+    "date_field": "timestamp",
+    "other_date_fields": [
+      "customer_birth_date",
+      "products.created_on"
+    ],
+    "time_range": [
+        null,
+        null
+    ]
+  },
+  {
+    "question": "What is the number of errors every minute by service?",
+    "target_index": "index",
+    "query": "source=index \n| where `tag.error` != null \n| stats sum(`tag.error`) as errors by span(timestamp, 1m), `process.serviceName`",
+    "type": "3",
+    "now": "TIMESTAMP('2028-06-27 05:58:31')",
+    "date_field": "timestamp",
+    "other_date_fields": [
+      "customer_birth_date",
+      "products.created_on"
+    ],
+    "time_range": [
+        null,
+        null
+    ]
+  },
+  {
+    "question": "What is the number of errors every minute in the product catalog service, by product ID?",
+    "target_index": "index",
+    "query": "source=index \n| where `process.serviceName` == \"productcatalogservice\" \n| stats sum(`tag.error`) as errors by span(timestamp, 1m), `tag.app@product@id`",
+    "type": "3",
+    "now": "TIMESTAMP('2000-02-13 15:39:23')",
+    "date_field": "timestamp",
+    "other_date_fields": [
+      "customer_birth_date",
+      "products.created_on"
+    ],
+    "time_range": [
+        null,
+        null
+    ]
+  },
+  {
+    "question": "Show me the log number for each response",
+    "target_index": "log_index",
+    "query": "source=log_index \n| stats COUNT() by response",
+    "type": "3",
+    "now": "TIMESTAMP('2008-07-10 14:22:30')",
+    "date_field": "timestamp",
+    "other_date_fields": [
+      "customer_birth_date",
+      "products.created_on"
+    ],
+    "time_range": [
+        null,
+        null
+    ]
+  },
+  {
+    "question": "Can you show me the average taxful price for each day of week?",
+    "target_index": "ecommerce",
+    "query": "source=ecommerce \n| stats AVG(taxful_total_price) by day_of_week_i",
+    "type": "3",
+    "now": "TIMESTAMP('2020-02-28 17:27:05')",
+    "date_field": "order_date",
+    "other_date_fields": [
+      "customer_birth_date",
+      "products.created_on"
+    ],
+    "time_range": [
+        null,
+        null
+    ]
+  },
+  {
+    "question": "I want to know the request number by response code and the ip",
+    "target_index": "log_index",
+    "query": "source=log_index \n| stats COUNT() by response, ip",
+    "type": "3",
+    "now": "TIMESTAMP('2027-07-31 12:27:41')",
+    "date_field": "timestamp",
+    "other_date_fields": [
+      "customer_birth_date",
+      "products.created_on"
+    ],
+    "time_range": [
+        null,
+        null
+    ]
+  },
+  {
+    "question": "Can you show me the flight number by origin city and destination city",
+    "target_index": "flight",
+    "query": "source=flight \n| stats COUNT() as cnt by OriginCityName, DestCityName",
+    "type": "3",
+    "now": "TIMESTAMP('2000-02-25 05:22:29')",
+    "date_field": "timestamp",
+    "other_date_fields": [
+      "customer_birth_date",
+      "products.created_on"
+    ],
+    "time_range": [
+        null,
+        null
+    ]
+  },
+  {
+    "question": "Show me the request number and average bytes for each ip",
+    "target_index": "log_index",
+    "query": "source=log_index \n| stats COUNT() as cnt, AVG(bytes) by ip",
+    "type": "3",
+    "now": "TIMESTAMP('2001-11-27 16:31:47')",
+    "date_field": "timestamp",
+    "other_date_fields": [
+      "customer_birth_date",
+      "products.created_on"
+    ],
+    "time_range": [
+        null,
+        null
+    ]
+  },
+  {
+    "question": "Can you show me the sum of taxful price and taxless price for each gender",
+    "target_index": "ecommerce",
+    "query": "source=ecommerce \n| stats SUM(taxful_total_price), SUM(taxless_total_price) by customer_gender",
+    "type": "3",
+    "now": "TIMESTAMP('2010-06-17 21:43:02')",
+    "date_field": "order_date",
+    "other_date_fields": [
+      "customer_birth_date",
+      "products.created_on"
+    ],
+    "time_range": [
+        null,
+        null
+    ]
+  },
+  {
+    "question": "Show me the maximum, minimum and average bytes for each ip",
+    "target_index": "log_index",
+    "query": "source=log_index \n| stats MAX(bytes), MIN(bytes), AVG(bytes) by ip",
+    "type": "3",
+    "now": "TIMESTAMP('2014-08-23 23:09:47')",
+    "date_field": "timestamp",
+    "other_date_fields": [
+      "customer_birth_date",
+      "products.created_on"
+    ],
+    "time_range": [
+        null,
+        null
+    ]
+  },
+  {
+    "question": "Can you show me number of order,  the sum of taxful price and taxless price for each gender",
+    "target_index": "ecommerce",
+    "query": "source=ecommerce \n| stats COUNT(), SUM(taxful_total_price), SUM(taxless_total_price) by customer_gender",
+    "type": "3",
+    "now": "TIMESTAMP('2027-03-10 12:44:39')",
+    "date_field": "order_date",
+    "other_date_fields": [
+      "customer_birth_date",
+      "products.created_on"
+    ],
+    "time_range": [
+        null,
+        null
+    ]
+  },
+  {
+    "question": "I want to know weekly trend of average bytes and request number for each machine operation system in the last month.",
+    "target_index": "log_index",
+    "query": "source=log_index \n| where timestamp > DATE_SUB(NOW(), INTERVAL 1 MONTH) \n| stats AVG(bytes), COUNT() by span(timestamp, 1w), machineos",
+    "type": "7",
+    "now": "TIMESTAMP('2023-04-22 09:58:20')",
+    "date_field": "timestamp",
+    "other_date_fields": [
+      "customer_birth_date",
+      "products.created_on"
+    ],
+    "time_range": [
+      "2023-03-22 09:58:20",
+      "2023-04-22 09:58:20"
+    ]
+  },
+  {
+    "question": "I want to know the weekly trend of taxful price sum and taxless price sum for each customer gender in the last 1 month.",
+    "target_index": "ecommerce",
+    "query": "source=ecommerce \n| where order_date > DATE_SUB(NOW(), INTERVAL 1 MONTH) \n| stats SUM(taxful_total_price), SUM(taxless_total_price) by span(order_date, 1w), customer_gender",
+    "type": "7",
+    "now": "TIMESTAMP('2011-08-27 23:50:55')",
+    "date_field": "order_date",
+    "other_date_fields": [
+      "customer_birth_date",
+      "products.created_on"
+    ],
+    "time_range": [
+      "2011-07-27 23:50:55",
+      "2011-08-27 23:50:55"
+    ]
+  },
+  {
+    "question": "Show me the weekly trend of max and average bytes in the last month",
+    "target_index": "log_index",
+    "query": "source=log_index \n| where timestamp > DATE_SUB(NOW(), INTERVAL 1 MONTH) \n| stats MAX(bytes), AVG(bytes) by span(timestamp, 1w)",
+    "type": "7",
+    "now": "TIMESTAMP('2013-01-11 19:48:16')",
+    "date_field": "timestamp",
+    "other_date_fields": [
+      "customer_birth_date",
+      "products.created_on"
+    ],
+    "time_range": [
+      "2012-12-11 19:48:16",
+      "2013-01-11 19:48:16"
+    ]
+  },
+  {
+    "question": "Could you please give me weekly summary of the sum of taxful price and taxless price in the last month?",
+    "target_index": "ecommerce",
+    "query": "source=ecommerce \n| where order_date > DATE_SUB(NOW(), INTERVAL 1 MONTH) \n| stats SUM(taxful_total_price), SUM(taxless_total_price) by span(order_date, 1w)",
+    "type": "7",
+    "now": "TIMESTAMP('2029-05-01 09:29:05')",
+    "date_field": "order_date",
+    "other_date_fields": [
+      "customer_birth_date",
+      "products.created_on"
+    ],
+    "time_range": [
+      "2029-04-01 09:29:05",
+      "2029-05-01 09:29:05"
+    ]
+  },
+  {
+    "question": "Show me the weekly trend of maximum bytes in the last month",
+    "target_index": "log_index",
+    "query": "source=log_index \n| where timestamp > DATE_SUB(NOW(), INTERVAL 1 MONTH) \n| stats MAX(bytes) by span(timestamp, 1w)",
+    "type": "7",
+    "now": "TIMESTAMP('2015-02-09 19:44:31')",
+    "date_field": "timestamp",
+    "other_date_fields": [
+      "customer_birth_date",
+      "products.created_on"
+    ],
+    "time_range": [
+      "2015-01-09 19:44:31",
+      "2015-02-09 19:44:31"
+    ]
+  },
+  {
+    "question": "Could you please give me weekly summary of the average of taxful price  in the last month?",
+    "target_index": "ecommerce",
+    "query": "source=ecommerce \n| where order_date > DATE_SUB(NOW(), INTERVAL 1 MONTH) \n| stats AVG(taxful_total_price) by span(order_date, 1w)",
+    "type": "7",
+    "now": "TIMESTAMP('2024-06-14 13:08:30')",
+    "date_field": "order_date",
+    "other_date_fields": [
+      "customer_birth_date",
+      "products.created_on"
+    ],
+    "time_range": [
+      "2024-05-14 13:08:30",
+      "2024-06-14 13:08:30"
+    ]
+  },
+  {
+    "question": "Show me the weekly trend of request number in the last month from each operation system?",
+    "target_index": "log_index",
+    "query": "source=log_index \n| where timestamp > DATE_SUB(NOW(), INTERVAL 1 MONTH) \n| stats COUNT() by span(timestamp, 1w), machineos",
+    "type": "7",
+    "now": "TIMESTAMP('2027-01-16 20:32:25')",
+    "date_field": "timestamp",
+    "other_date_fields": [
+      "customer_birth_date",
+      "products.created_on"
+    ],
+    "time_range": [
+      "2026-12-16 20:32:25",
+      "2027-01-16 20:32:25"
+    ]
+  },
+  {
+    "question": "Could you please give me the weekly cancelled flight number for each week day in the last month?",
+    "target_index": "flight",
+    "query": "source=flight \n| where timestamp > DATE_SUB(NOW(), INTERVAL 1 MONTH) AND Cancelled=true \n| stats COUNT() by span(timestamp, 1w), dayOfWeek",
+    "type": "7",
+    "now": "TIMESTAMP('2024-12-13 10:06:44')",
+    "date_field": "timestamp",
+    "other_date_fields": [
+      "customer_birth_date",
+      "products.created_on"
+    ],
+    "time_range": [
+      "2024-11-13 10:06:44",
+      "2024-12-13 10:06:44"
+    ]
+  },
+  {
+    "question": "Show me the weekly trend of byte sum in the last month from each operation system and response?",
+    "target_index": "log_index",
+    "query": "source=log_index \n| where timestamp > DATE_SUB(NOW(), INTERVAL 1 MONTH) \n| stats SUM(bytes) by span(timestamp, 1w), machineos, response",
+    "type": "7",
+    "now": "TIMESTAMP('2003-12-10 02:14:36')",
+    "date_field": "timestamp",
+    "other_date_fields": [
+      "customer_birth_date",
+      "products.created_on"
+    ],
+    "time_range": [
+      "2003-11-10 02:14:36",
+      "2003-12-10 02:14:36"
+    ]
+  },
+  {
+    "question": "Can you show me the weekly order number for each customer gender and day of week in tge last month?",
+    "target_index": "ecommerce",
+    "query": "source=ecommerce \n| where order_date > DATE_SUB(NOW(), INTERVAL 1 MONTH) \n| stats COUNT() by span(order_date, 1w), day_of_week_i, customer_gender",
+    "type": "7",
+    "now": "TIMESTAMP('2006-10-14 12:24:27')",
+    "date_field": "order_date",
+    "other_date_fields": [
+      "customer_birth_date",
+      "products.created_on"
+    ],
+    "time_range": [
+      "2006-09-14 12:24:27",
+      "2006-10-14 12:24:27"
+    ]
+  }
+]

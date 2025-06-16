@@ -141,7 +141,9 @@ def main():
     results_file = os.path.join(args.results_root, args.bench_file)
     target_file = os.path.join(
         args.target_root,
-        (args.label_root + "-" + args.results_root + "-" + args.bench_file).replace("/", "-"),
+        (args.label_root + "-" + args.results_root + "-" + args.bench_file).replace(
+            "/", "-"
+        ),
     )
     print(target_file)
     compare_results(label_file, results_file, target_file)

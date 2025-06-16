@@ -39,16 +39,18 @@ def insert_after_first_pipe(query, insert_text):
 
 def run_ppl(sample):
     query = sample["query"]
+
+    conditions = []
     if "start" in sample and sample["start"] is not None:
-        query = insert_after_first_pipe(
-            query, f"where {sample['date_field']} >= TIMESTAMP('{sample['start']}') "
-        )
+        conditions.append(f"{sample['date_field']} >= TIMESTAMP('{sample['start']}')")
     if "end" in sample and sample["end"] is not None:
-        query = insert_after_first_pipe(
-            query, f"where {sample['date_field']} <= TIMESTAMP('{sample['end']}') "
-        )
+        conditions.append(f"{sample['date_field']} <= TIMESTAMP('{sample['end']}')")
     if "date_field" in sample:
-        query = insert_after_first_pipe(query, f"where {sample['date_field']} < NOW() ")
+        conditions.append(f"{sample['date_field']} < NOW()")
+    if conditions:
+        where_clause = "where " + " AND ".join(conditions)
+        query = insert_after_first_pipe(query, where_clause + " ")
+
     if "now" in sample:
         query = query.replace("NOW()", sample["now"])
     sample["query"] = query
@@ -65,9 +67,20 @@ def run_ppl(sample):
     return sample
 
 
-def evaluate_ppl(ppl_path):
+def evaluate_ppl(ppl_path, time_path):
     with open(ppl_path) as f:
         samples = json.load(f)
+        for sample in samples:
+            sample.pop("start", None)
+            sample.pop("end", None)
+
+    if time_path is not None:
+        with open(time_path) as f:
+            samples_times = json.load(f)
+        assert len(samples_times) == len(samples)
+        for i in range(len(samples_times)):
+            samples[i]["start"] = samples_times[i].pop("start", None)
+            samples[i]["end"] = samples_times[i].pop("end", None)
 
     results = []
 
@@ -92,6 +105,12 @@ if __name__ == "__main__":
         default="dataset",
     )
     parser.add_argument(
+        "--time_root",
+        type=str,
+        help="Root directory for time files",
+        default=None,
+    )
+    parser.add_argument(
         "--bench_file",
         type=str,
         help="Input JSON filename with generated PPL queries",
@@ -108,6 +127,11 @@ if __name__ == "__main__":
 
     # Construct full input path
     ppl_path = os.path.join(args.ppl_root, args.bench_file)
+    time_path = (
+        os.path.join(args.time_root, args.bench_file)
+        if args.time_root is not None
+        else None
+    )
 
     # Construct full output path
     output_path = os.path.join(args.output_root, args.bench_file)
@@ -115,7 +139,7 @@ if __name__ == "__main__":
     # Ensure output directory exists
     os.makedirs(args.output_root, exist_ok=True)
 
-    results = evaluate_ppl(ppl_path)
+    results = evaluate_ppl(ppl_path, time_path)
 
     # Save results to a JSON file
     with open(output_path, "w") as f:

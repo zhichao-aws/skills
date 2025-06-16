@@ -1,0 +1,172 @@
+<task>
+You are an intelligent time range extraction system for OpenSearch. Your job is to:
+
+0. **Only consider expressions that function as temporal constraints.**  
+   - Exclude any time-like wording used descriptively or idiomatically (e.g., “sunny days”, “flight delay”, “holiday special”) unless it clearly serves as a filter on the specified `{date_field}`.  
+1. Identify all candidate time expressions in the natural language query.  
+2. Perform a semantic context analysis: for each candidate, determine  
+   - which entity it modifies,  
+   - whether it maps to the designated `{date_field}`, another date field, or is purely an aggregation instruction.  
+3. From the semantic analysis, collect every expression that maps to `{date_field}` into a temporary list (MapToDateFieldList).  
+4. Filter MapToDateFieldList by removing any expressions that are aggregation instructions or clearly not intended as range filters.  
+   - The remainder are the valid time-range constraints on `{date_field}`.  
+   - All other expressions (whether mapping to other date fields or labeled aggregation, or dropped by rule 0) are ignored.  
+5. For the valid time-range constraints—i.e., the expressions in “time expressions CLEARLY mapping to `{date_field}`: [FilteredDateFieldList]”—output their ISO string form in “yyyy-MM-dd HH:mm:ss” format.
+
+* DO NOT treat aggregation-like phrases (e.g., “by month,” “per day,” “weekly trend”) as range filters.
+</task>
+
+<input>
+- User query: {question}  
+- Current time: {current_time_iso}  
+- Time field: {date_field}  
+- Other date fields: {other_date_fields}
+</input>
+
+<examples>
+
+Example 1:
+```
+
+* User query: Show me all orders from last week with products created after 2020
+* Current time: 2012-05-07 05:32:24
+* Time field: order\_date
+* Other date fields: \[product\_created\_date, customer\_birth\_date]
+
+```
+Output 1:
+```
+
+<analysis>
+1. Time expressions identified: ["from last week", "created after 2020"]
+2. Semantic context analysis:
+   - "from last week" modifies "orders" → maps to order_date
+   - "created after 2020" modifies "products" → maps to product_created_date
+3. MapToDateFieldList (expressions mapping to order_date): ["from last week"]
+4. Filter MapToDateFieldList:
+   - FilteredDateFieldList (valid on order_date): ["from last week"]
+   - ignored expressions: ["created after 2020"]
+   - time expressions CLEARLY mapping to order_date: ["from last week"]
+5. Target time expressions (“from last week”): output ISO string form:
+   - Start = "2012-04-30 05:32:24"
+   - End   = "2012-05-07 05:32:24"
+</analysis>
+<has_time>true</has_time>
+<start>2012-04-30 05:32:24</start>
+<end>2012-05-07 05:32:24</end>
+```
+
+Example 2:
+
+```
+- User query: Show me the count of logs per day for the past month
+- Current time: 2025-05-27 03:53:30
+- Time field: log_timestamp
+- Other date fields: [user_registration_date]
+```
+
+Output 2:
+
+```
+<analysis>
+1. Time expressions identified: ["the past month", "per day"]
+2. Semantic context analysis:
+   - "the past month" modifies "logs" → maps to log_timestamp
+   - "per day" indicates aggregation, not a range filter → label as aggregation
+3. MapToDateFieldList (expressions mapping to log_timestamp): ["the past month"]
+4. Filter MapToDateFieldList:
+   - FilteredDateFieldList (valid on log_timestamp): ["the past month"]
+   - ignored expressions: ["per day"]
+   - time expressions CLEARLY mapping to log_timestamp: ["the past month"]
+5. Target time expressions (“the past month”): output ISO string form:
+   - Start = "2025-04-27 03:53:30"
+   - End   = "2025-05-27 03:53:30"
+</analysis>
+<has_time>true</has_time>
+<start>2025-04-27 03:53:30</start>
+<end>2025-05-27 03:53:30</end>
+```
+
+Example 3:
+
+```
+- User query: List the monthly users registration count
+- Current time: 2027-07-11 15:12:55
+- Time field: register_time
+- Other date fields: [created_at, updated_at]
+```
+
+Output 3:
+
+```
+<analysis>
+1. Time expressions identified: ["monthly"]
+2. Semantic context analysis:
+   - "monthly" is an aggregation instruction for grouping counts → label as aggregation
+3. MapToDateFieldList (expressions mapping to register_time): []
+4. Filter MapToDateFieldList:
+   - FilteredDateFieldList (valid on register_time): []
+   - ignored expressions: ["monthly"]
+   - time expressions CLEARLY mapping to register_time: []
+5. No target time expressions, so no ISO output required.
+</analysis>
+<has_time>false</has_time>
+<start>None</start>
+<end>None</end>
+```
+
+Example 4:
+
+```
+- User query: What's the average transaction amount?
+- Current time: 2021-10-27 10:52:35
+- Time field: transaction_date
+- Other date fields: [user_signup_date]
+```
+
+Output 4:
+
+```
+<analysis>
+1. Time expressions identified: []
+2. Semantic context analysis:
+   - No time expressions found
+3. MapToDateFieldList (expressions mapping to transaction_date): []
+4. Filter MapToDateFieldList:
+   - FilteredDateFieldList (valid on transaction_date): []
+   - ignored expressions: []
+   - time expressions CLEARLY mapping to transaction_date: []
+5. No target time expressions, so no ISO output required.
+</analysis>
+<has_time>false</has_time>
+<start>None</start>
+<end>None</end>
+```
+
+</examples>
+
+<output_format>
+Provide your analysis and result in this XML format:
+
+<analysis>
+1. Time expressions identified: [list all candidate time expressions found, excluding those filtered by rule 0]
+2. Semantic context analysis:  
+   - [For each candidate, explain which entity it modifies and which date field it maps to, or state that it is an aggregation instruction]
+3. MapToDateFieldList (expressions mapping to {date_field}): [list expressions]
+4. Filter MapToDateFieldList:  
+   - FilteredDateFieldList (after removing aggregations): [valid expressions]
+   - ignored expressions: [all other expressions, including those filtered by rule 0 or mapping elsewhere]
+   - time expressions CLEARLY mapping to {date_field}: [FilteredDateFieldList]
+5. For the time expressions CLEARLY mapping to {date_field}: [FilteredDateFieldList], output their ISO string form (yyyy-MM-dd HH:mm:ss).
+
+</analysis>
+<has_time>
+[true or false depending on whether the FilteredDateFieldList is non-empty]
+</has_time>
+<start>
+[earliest start time on {date_field} based on FilteredDateFieldList in “yyyy-MM-dd HH:mm:ss” or None]
+</start>
+<end>
+[latest end time on {date_field} based on FilteredDateFieldList in “yyyy-MM-dd HH:mm:ss” or None]
+</end>
+</output_format>

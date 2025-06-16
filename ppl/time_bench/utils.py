@@ -39,7 +39,7 @@ def parse_tagged_string(text):
 
 
 def invoke(
-    prompt: str, max_retries: int = 3, initial_delay: float = 1.0, **kwargs
+    prompt: str, max_retries: int = 10, initial_delay: float = 1.0, **kwargs
 ) -> Dict[str, Any]:
     """
     Invoke the Bedrock model with retry functionality.
