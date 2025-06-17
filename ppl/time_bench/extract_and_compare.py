@@ -78,6 +78,10 @@ def process_example(example, prompt):
     for key in ["start", "end"]:
         if res[key] is not None:
             res[key] = normalize_date_format(res[key])
+            
+    if res["start"] == res["end"]:
+        res["start"] = None
+        res["end"] = None
     return res
 
 

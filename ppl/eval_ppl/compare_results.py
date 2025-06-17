@@ -131,8 +131,8 @@ def main():
     parser = argparse.ArgumentParser(description="Compare PPL execution results.")
     parser.add_argument("--label_root", help="Path to the ground truth JSON file")
     parser.add_argument("--results_root", help="Path to the file to evaluate")
-    parser.add_argument("--target_root", help="Path to the file to evaluate")
-    parser.add_argument("--bench_file", help="Path to write the comparison results")
+    parser.add_argument("--target_root", help="Path to save the file", default="compare_results")
+    parser.add_argument("--bench_file")
 
     args = parser.parse_args()
     os.makedirs(args.target_root, exist_ok=True)

@@ -211,3 +211,7 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+results_baseline
+results_time_parsed
+compare_results
